@@ -18,7 +18,7 @@
       #include "Soft/Debounce.h"
       #include "Soft/Wire.h"
 
-      // #include "OneLib/Driver/OnePin.h"
+      #include "OnePin.h"
       // #include "OneLib/Driver/Encoder.h"
       // #include "OneLib/Driver/AccelEncoder.h"
       // #include "OneLib/Driver/Button.h"

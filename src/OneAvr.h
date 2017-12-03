@@ -14,7 +14,7 @@
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
       #include "Soft/Wire.h"
 
-      // #include "OneLib/Driver/OnePin.h"
+      #include "OnePin.h"
       // #include "OneLib/Driver/Encoder.h"
       // // #include "OneLib/Driver/AccelEncoder.h"//avr has no millis functions, so cant have this
       // #include "OneLib/Driver/Button.h"

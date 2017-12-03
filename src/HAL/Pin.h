@@ -1,8 +1,8 @@
 /* -*- C++ -*- */
-// #ifndef ONEPIN_DEF
-//   #define ONEPIN_DEF
+#ifndef ONEPIN_DEF
+  #define ONEPIN_DEF
 
-  // namespace OneLib {
+  namespace OneLib {
 
     // class Framework {
     //   public:
@@ -107,5 +107,5 @@
         }
     };
 
-  // }
-// #endif
+  }
+#endif

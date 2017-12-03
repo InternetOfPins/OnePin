@@ -9,7 +9,7 @@
 
       #define CHRONOMETER
 
-      static inline unsigned long getMillis() {return millis();}
+      inline unsigned long getMillis() {return millis();}
 
       #include "HAL/Mem.h"
       #include "HAL/Func.h"
@@ -52,5 +52,5 @@
         static inline void begin() {Pin<pin>::modeOut();}
       };
     };
-  }//namespace OneLib
+  };//namespace OneLib
 #endif

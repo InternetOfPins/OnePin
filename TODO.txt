@@ -1,0 +1,36 @@
+
+
+- analog reading
+- timmers
+- int's and pcint's
+- pin allocation at compile time
+- pin descriptors and pin blocks for IoP
+
+//this does not allow the crazy maps of 2560
+[PORTD:0-7][PORTB:8-13][PORTC:14-19][HWSPI:20-52][I2C:53-60][SERIAL:61-77]
+
+OnePin map[]={...};
+- add error pin, a pin that can not be used and errors at compile time
+- start OnePin map with error pins
+- allocate pins at compile time => virtual class of OnePin?
+- do now allow reallocation (at compile time)
+- however pin operations will NOT use the map, all info is stored on the pin
+- aggregate all begins? only from maps.
+
+- join Func and MFunc into a single Action
+- implement soft pins with relative and absolute times
+  After<time ms> ____-------------
+  Wait<delta ms> -----____________
+  Every<delta ms> ____|____|____|___
+  Toggle<delta on ms,delta off ms> ---_---_---_---_
+- unify schedule? this is too complicated
+
+OnePin
+  RecState
+    OnChange Action
+    OnRise Action
+    OnFall Action
+    Debounce n
+    Logic
+      Logic
+        soft/hard pin

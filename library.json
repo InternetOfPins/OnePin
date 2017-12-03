@@ -1,0 +1,13 @@
+{
+  "name": "OnePin",
+  "keywords": "pin level meta framework",
+  "description": "Zero cost overlay for pin frameworks",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/InternetOfPins/OnePin",
+    "branch": "master"
+  },
+  "frameworks": "arduino",
+  "platforms": "*"
+}

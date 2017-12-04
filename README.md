@@ -10,9 +10,30 @@ Pin level meta-framework
 3. Provide pin composition on client side. Allows pin based libraries to abstract of pin details.
 4. Base for higher abstractions as pin routing and IoP (Internet of Pins)
 
+## Motivation
+
+Allow library writers to be more generic and target multiple frameworks at once.
+Because current library development requires changing the library code in order to:
+
+- Support software debounce
+- Use another framework
+- Support same hardware connected over I²C, SPI or any other expansion port (⁺pin routing and virtual pins proposals).
+- Reverse logic, some libraries make an internal management of pin normal state. We need not.
+- Signal NA pins by using VoidPin, this abstraction removes pin output code.
+
 ## Technique
 
 Using c++ type level programming to overlay existing frameworks with zero-cost.
+
+By zero-cost we mean: the abstraction will either be absent or
+
+**Zero-cost** meta-programming with static inline functions.
+
+**Composition** using c++ mixins.
+
+**OnePin** top level pin class with virtual functions to cover low level mixins.
+This class allows delivering a generic pin, breaking the template/mixin chain.
+_Libraries should use this type of pin_
 
 ### Features
 
@@ -127,6 +148,22 @@ void loop() {
   Led2::set(tog<500,500>());
 }
 ```
+
+## Generated code
+
+_this data can be outdated_
+
+**Arduino BtnBlink**
+
+>Program:    1154 bytes (3.5% Full)
+
+>Data:          9 bytes (0.4% Full)
+
+**OneLib BtnBlink**
+
+>Program:     702 bytes (2.1% Full)
+
+>Data:          9 bytes (0.4% Full)
 
 ## Benchmark
 

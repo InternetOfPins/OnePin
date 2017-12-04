@@ -53,18 +53,32 @@ on the sequence of VirtualPins proposals done to Arduino framework
       public:
         // VPin():pin(O()) {}
         OnePinHook(O& o):pin(o) {}
-        virtual void begin() {pin.begin();}
-        virtual void modeOut() {pin.modeOut();}
-        virtual void modeIn() {pin.modeIn();}
-        virtual void modeInUp() {pin.modeInUp();}
-        virtual void on() {pin.on();}
-        virtual void off() {pin.off();}
-        virtual bool in() {return pin.in();}
-        virtual bool rawIn() {return pin.rawIn();}
-        virtual bool logicIn() {return pin.logicIn();}
+        void begin() override {pin.begin();}
+        void modeOut() override {pin.modeOut();}
+        void modeIn() override {pin.modeIn();}
+        void modeInUp() override {pin.modeInUp();}
+        void on() override {pin.on();}
+        void off() override {pin.off();}
+        bool in() override {return pin.in();}
+        bool rawIn() override {return pin.rawIn();}
+        bool logicIn() override {return pin.logicIn();}
       protected:
         O& pin;
     };
+
+    template<typename P>
+    class Hook {
+    public:
+      static P hwPin;
+      static OnePinHook<P> hook;
+      // inline operator OnePin&() {return hook;}
+      static inline OnePin& pin() {return hook;}
+    };
+    template<typename P>
+    P Hook<P>::hwPin;
+    template<typename P>
+    OnePinHook<P> Hook<P>::hook(Hook<P>::hwPin);
+
   };//namespace OneLib
 
 #endif

@@ -148,7 +148,7 @@ void test() {
   test(1,4,"OneLib VoidPin mode",
     [](){},
     [](){VoidPin::modeIn();},
-    [](){PinCap<OneLib::Arduino::Debouncer<VoidPin,10>>::modeIn();},
+    [](){},//PinCap<OneLib::Arduino::Debouncer<VoidPin,10>>::modeIn();},
     [](){vvoidPin.modeIn();}
   );
 
@@ -175,13 +175,13 @@ void test() {
   test(2,3,"OnePin AVR input",
     [](){},
     [](){Led().in();},
-    [](){},//PinCap<OneLib::Arduino::Debouncer<Led,10>>().in();},
+    [](){PinCap<OneLib::Arduino::Debouncer<Led,10>>().in();},
     [](){led.in();}
   );
   test(2,4,"OneLib VoidPin input",
     [](){},
     [](){VoidPin().in();},
-    [](){},
+    [](){},//PinCap<OneLib::Arduino::Debouncer<VoidPin,10>>().in();},
     [](){vvoidPin.in();}
   );
 
@@ -214,7 +214,7 @@ void test() {
   test(3,4,"OneLib VoidPin output",
     [](){},
     [](){VoidPin::off();},
-    [](){},
+    [](){},//PinCap<OneLib::Arduino::Debouncer<VoidPin,10>>::off();},
     [](){vvoidPin.off();}
   );
 }

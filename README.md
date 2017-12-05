@@ -172,37 +172,36 @@ _this data can be outdated_
 Control and Empty functions are only test calibration stages where no operation is performed. As seen on control stage test slots are not homogeneous, so tests are done outside that area, hence the use of `Empty function`
 
 ### Control
-| Test                          |#Ops  |Debounced|OnePin   |
-|------------------------------:|------:|------:|------:|
-|Empty function:                |3976   |4071   |4071   |
-|Empty function:                |4040   |4070   |4071   |
-|Empty function:                |4041   |4071   |4070   |
-|Empty function:                |4040   |4071   |4071   |
+| Test                          |Empty  |#Ops   |Deb.   |OnePin |
+|------------------------------:|------:|------:|------:|------:|
+|Empty function:                |3976   |4071   |4071   |4070   |
+|Empty function:                |4040   |4070   |4072   |4070   |
+|Empty function:                |4040   |4070   |4071   |4071   |
+|Empty function:                |4041   |4070   |4070   |4071   |
 ### pinMode
-| Test                          |#Ops  |Debounced|OnePin   |
-|------------------------------:|------:|------:|------:|
-|Empty function:                |3976   |4070   |4071   |
-|Arduino pin mode:              |2188   |4071   |2205   |
-|OneLib Arduino mode:           |2185   |2205   |2206   |
-|OneLib AVR mode:               |3352   |3377   |3377   |
-|OneLib VoidPin mode:           |4033   |4071   |4070   |
+| Test                          |Empty  |#Ops   |Deb.   |OnePin |
+|------------------------------:|------:|------:|------:|------:|
+|Empty function:                |3976   |4070   |4072   |4071   |
+|Arduino pin mode:              |4038   |2205   |4070   |4071   |
+|OneLib Arduino mode:           |4035   |2160   |2160   |2160   |
+|OneLib AVR mode:               |4039   |3378   |3377   |3377   |
+|OneLib VoidPin mode:           |4033   |4071   |4070   |4070   |
 ### digitalRead
-| Test                          |#Ops  |Debounced|OnePin   |
-|------------------------------:|------:|------:|------:|
-|Empty function:                |3977   |4070   |4070   |
-|Arduino pin input:             |2404   |4071   |2423   |
-|OneLib Arduino input:          |2184   |1095   |2206   |
-|OnePin AVR input:              |4037   |1417   |4070   |
-|OneLib VoidPin input:          |4032   |1491   |4071   |
+| Test                          |Empty  |#Ops   |Deb.   |OnePin |
+|------------------------------:|------:|------:|------:|------:|
+|Empty function:                |3976   |4070   |4071   |4071   |
+|Arduino pin input:             |4035   |2423   |4071   |4071   |
+|OneLib Arduino input:          |4033   |2205   |1095   |2205   |
+|OnePin AVR input:              |4038   |4070   |1418   |4071   |
+|OneLib VoidPin input:          |4033   |4071   |1491   |4070   |
 ### digitalWrite
-| Test                          |\#Ops  |Debounced|OnePin   |
-|------------------------------:|------:|------:|------:|
-|Empty function:                |3977   |4071   |4070   |
-|Arduino pin output:            |2216   |4071   |2236   |
-|OneLib Arduino output:         |2215   |2236   |2236   |
-|OnePin AVR output:             |3747   |3780   |3780   |
-|OneLib VoidPin output:         |4031   |4070   |4070   |
-
+| Test                          |Empty  |#Ops   |Deb.   |OnePin |
+|------------------------------:|------:|------:|------:|------:|
+|Empty function:                |3976   |4070   |4071   |4070   |
+|Arduino pin output:            |4034   |2236   |4071   |4071   |
+|OneLib Arduino output:         |4032   |2190   |2189   |2190   |
+|OnePin AVR output:             |4036   |3780   |3779   |3780   |
+|OneLib VoidPin output:         |4031   |4071   |4070   |4070   |
 
 ## Disassembly compare
 

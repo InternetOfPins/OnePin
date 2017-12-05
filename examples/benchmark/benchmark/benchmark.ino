@@ -31,7 +31,7 @@ unsigned long test(auto f) {
   return cnt;
 }
 
-unsigned long test(const char* title,auto test0,auto test1,auto test2) {
+unsigned long test(const char* title,auto test0,auto test1,auto test2,auto test3) {
   Serial.print("|");
   Serial.print(title);
   Serial.print(":\t\t|");
@@ -39,16 +39,23 @@ unsigned long test(const char* title,auto test0,auto test1,auto test2) {
   Serial.print("\t|");
   Serial.print(test(test1));
   Serial.print("\t|");
-  Serial.print(test(test0));
+  Serial.print(test(test2));
+  Serial.print("\t|");
+  Serial.print(test(test3));
   Serial.println("\t|");
+}
+
+void head() {
+  Serial.println("| Test                          |Empty  |\#Ops   |Deb.   |OnePin |");
+  Serial.println("|------------------------------:|------:|------:|------:|------:|");
 }
 
 void test() {
   Serial.println("**Benchmark**");
   Serial.println("### Control");//------------------------------------
-  Serial.println("| Test                          |\#Ops  |Debounced|OnePin   |");
-  Serial.println("|------------------------------:|------:|------:|------:|");
+  head();//--------------------------------------------------------------------
   test("Empty function",
+    [](){},
     [](){},
     [](){},
     [](){}
@@ -56,102 +63,117 @@ void test() {
   test("Empty function",
     [](){},
     [](){},
+    [](){},
     [](){}
   );
   test("Empty function",
     [](){},
     [](){},
+    [](){},
     [](){}
   );
   test("Empty function",
+    [](){},
     [](){},
     [](){},
     [](){}
   );
   Serial.println("### pinMode");//------------------------------------
-  Serial.println("| Test                          |\#Ops  |Debounced|OnePin   |");
-  Serial.println("|------------------------------:|------:|------:|------:|");
+  head();//--------------------------------------------------------------------
   test("Empty function",
+    [](){},
     [](){},
     [](){},
     [](){}
   );
   test("Arduino pin mode",
+    [](){},
     [](){pinMode(13,INPUT);},
     [](){},
     [](){}
   );
   test("OneLib Arduino mode",
+    [](){},
     [](){Pin13::modeIn();},
-    [](){RecState<Debouncer<Pin13,30>>::modeIn();},
+    [](){Debouncer<Pin13,10>::modeIn();},
     [](){pin13.modeIn();}
   );
   test("OneLib AVR mode",
+    [](){},
     [](){Led::modeIn();},
-    [](){RecState<Debouncer<Led,30>>::modeIn();},
+    [](){Debouncer<Led,10>::modeIn();},
     [](){led.modeIn();}
   );
   test("OneLib VoidPin mode",
+    [](){},
     [](){VoidPin::modeIn();},
-    [](){RecState<Debouncer<VoidPin,30>>::modeIn();},
+    [](){Debouncer<VoidPin,10>::modeIn();},
     [](){vvoidPin.modeIn();}
   );
 
   Serial.println("### digitalRead");//------------------------------------
-  Serial.println("| Test                          |\#Ops  |Debounced|OnePin   |");
-  Serial.println("|------------------------------:|------:|------:|------:|");
+  head();//--------------------------------------------------------------------
   test("Empty function",
+    [](){},
     [](){},
     [](){},
     [](){}
   );
   test("Arduino pin input",
+    [](){},
     [](){digitalRead(13);},
     [](){},
     [](){}
   );
   test("OneLib Arduino input",
+    [](){},
     [](){Pin13().in();},
-    [](){RecState<Debouncer<Pin13,30>>().in();},
+    [](){Debouncer<Pin13,10>().in();},
     [](){pin13.in();}
   );
   test("OnePin AVR input",
+    [](){},
     [](){Led().in();},
-    [](){RecState<Debouncer<Led,30>>().in();},
+    [](){Debouncer<Led,10>().in();},
     [](){led.in();}
   );
   test("OneLib VoidPin input",
+    [](){},
     [](){VoidPin().in();},
-    [](){RecState<Debouncer<VoidPin,30>>().in();},
+    [](){Debouncer<VoidPin,10>().in();},
     [](){vvoidPin.in();}
   );
 
   Serial.println("### digitalWrite");//------------------------------------
-  Serial.println("| Test                          |\\#Ops  |Debounced|OnePin   |");
-  Serial.println("|------------------------------:|------:|------:|------:|");
+  head();//--------------------------------------------------------------------
   test("Empty function",
+    [](){},
     [](){},
     [](){},
     [](){}
   );
   test("Arduino pin output",
+    [](){},
     [](){digitalWrite(13,0);},
     [](){},
     [](){}
   );
   test("OneLib Arduino output",
+    [](){},
     [](){Pin13::off();},
-    [](){RecState<Debouncer<Pin13,30>>::off();},
+    [](){Debouncer<Pin13,10>::off();},
     [](){pin13.off();}
   );
   test("OnePin AVR output",
+    [](){},
     [](){Led::off();},
-    [](){RecState<Debouncer<Led,30>>::off();},
+    [](){Debouncer<Led,10>::off();},
     [](){led.off();}
   );
   test("OneLib VoidPin output",
+    [](){},
     [](){VoidPin::off();},
-    [](){RecState<Debouncer<VoidPin,30>>::off();},
+    [](){Debouncer<VoidPin,10>::off();},
     [](){vvoidPin.off();}
   );
 }

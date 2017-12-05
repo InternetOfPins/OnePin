@@ -102,6 +102,8 @@
         static inline void begin() {Pin<Port,pin>::modeOut();}
       };
 
+      //Example of MCU ports/pins zero-cost abstraction
+      //all this defs go only on compile time
       namespace AtMega328p {
         typedef Avr::Port<0x23> PortB;
         typedef Avr::Port<0x26> PortC;

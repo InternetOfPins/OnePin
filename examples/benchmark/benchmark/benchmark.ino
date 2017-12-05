@@ -33,11 +33,11 @@ unsigned long test(auto f) {
 
 bool valid[4][5][4]={
   {
-    {0,0,0,0},
-    {0,1,1,1},
-    {0,1,1,1},
-    {0,1,1,1},
-    {0,1,1,1}
+    {1,1,1,1},
+    {1,1,1,1},
+    {1,1,1,1},
+    {1,1,1,1},
+    {1,1,1,1}
   },
   {
     {0,0,0,0},
@@ -67,16 +67,16 @@ unsigned long test(int grp,int idx,const char* title,auto test0,auto test1,auto 
   Serial.print(title);
   Serial.print(":\t\t|");
   int r0=test(test0);
-  Serial.print(valid[grp][idx][0]*r0);
+  if (valid[grp][idx][0]) Serial.print(r0); else Serial.print("-");
   Serial.print("\t|");
   int r1=test(test1);
-  Serial.print(valid[grp][idx][1]*r1);
+  if (valid[grp][idx][1]) Serial.print(r1); else Serial.print("-");
   Serial.print("\t|");
   int r2=test(test2);
-  Serial.print(valid[grp][idx][2]*r2);
+  if (valid[grp][idx][2]) Serial.print(r2); else Serial.print("-");
   Serial.print("\t|");
   int r3=test(test3);
-  Serial.print(valid[grp][idx][3]*r3);
+  if (valid[grp][idx][3]) Serial.print(r3); else Serial.print("-");
   Serial.println("\t|");
 }
 

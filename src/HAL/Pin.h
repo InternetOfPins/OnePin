@@ -68,9 +68,9 @@
     class RecState:public O/*,protected virtual LastState<O>*/ {
       public:
         //TODO: also record output changes!
-        static inline bool in() {return setLast(O::in());}
-        static inline void on() {O::on();setLast(true);}
-        static inline void off() {O::off();setLast(false);}
+        static inline bool in() {return O::setLast(O::in());}
+        static inline void on() {O::on();O::setLast(true);}
+        static inline void off() {O::off();O::setLast(false);}
     };
 
     //avoid self stack
@@ -86,11 +86,11 @@
         OnChangeAction() {}
         static inline bool in() {
           bool n=O::in();
-          if (n!=getLast()) f();
+          if (n!=O::getLast()) f();
           return n;
         }
-        static inline void on() {O::on();if (!getLast()) f();}
-        static inline void off() {O::Off();if (getLast()) f();}
+        static inline void on() {O::on();if (!O::getLast()) f();}
+        static inline void off() {O::Off();if (O::getLast()) f();}
     };
 
     template<class O,void(*f)()>
@@ -106,10 +106,10 @@
       public:
         static inline bool in() {
           bool n=O::in();
-          if (n&&n!=getLast()) f();
+          if (n&&n!=O::getLast()) f();
           return n;
         }
-        static inline void on() {O::on();if (!getLast()) f();}
+        static inline void on() {O::on();if (!O::getLast()) f();}
         static inline void off() {O::off();}
     };
 
@@ -126,11 +126,11 @@
       public:
         static inline bool in() {
           bool n=O::in();
-          if (!(n||n==getLast())) f();
+          if (!(n||n==O::getLast())) f();
           return n;
         }
         static inline void on() {O::on();}
-        static inline void off() {O::off();if (getLast()) f();}
+        static inline void off() {O::off();if (O::getLast()) f();}
     };
 
     template<class O,void(*f)()>
@@ -145,10 +145,10 @@
     template<class O>
     struct PinCap:public O {
       static inline void begin() {O::begin();}
-      static inline void tog() {set(!in());}
-      template<bool T> static inline void set() {T?on():off();}//compiletime
-      inline operator bool() {return in();}
-      static inline void set(bool v) {v?on():off();}//runtime
+      static inline void tog() {set(!O::in());}
+      template<bool T> static inline void set() {T?O::on():O::off();}//compiletime
+      inline operator bool() {return O::in();}
+      static inline void set(bool v) {v?O::on():O::off();}//runtime
     };
 
     //remove LastState functionality (no-one else used it)

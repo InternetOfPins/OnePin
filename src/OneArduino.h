@@ -41,7 +41,7 @@
         static inline void set(bool v) {v?on():off();}
       };
       template<int pin>
-      using Pin=LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>;
+      using Pin=LastState<LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>>;
 
       template<const int pin>
       struct InputPin:public Pin<pin> {

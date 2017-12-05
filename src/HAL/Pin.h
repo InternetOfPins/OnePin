@@ -71,12 +71,17 @@
         inline bool in() {return setLast(O::in());}
     };
 
+    //avoid self stack
+    //the type IS stacked but the functionality is NOT
+    template<class O>
+    class RecState<RecState<O>>:public RecState<O> {};
+
     //attach an action to pin change (input)
     //when pin changes
     template<class O,void(*f)()>
-    class OnChange:public O,protected virtual LastState {
+    class OnChangeAction:public O,protected virtual LastState {
       public:
-        OnChange() {}
+        OnChangeAction() {}
         inline operator bool() {return in();}
         inline bool in() {
           bool n=O::in();
@@ -84,28 +89,51 @@
           return n;
         }
     };
+
+    template<class O,void(*f)()>
+    class OnChangeAction<RecState<O>,f>
+      :public OnChangeAction<O,f> {};
+
+    template<class O,void(*f)()>
+    using OnChange=RecState<OnChangeAction<O,f>>;
+
     //when pin rises
     template<class O,void(*f)()>
-    class OnRise:public O,protected virtual LastState {
+    class OnRiseAction:public O,protected virtual LastState {
       public:
         inline operator bool() {return in();}
         inline bool in() {
           bool n=O::in();
-          if (n&&n!=O::getLast()) f();
+          if (n&&n!=getLast()) f();
           return n;
         }
     };
+
+    template<class O,void(*f)()>
+    class OnRiseAction<RecState<O>,f>
+      :public OnRiseAction<O,f> {};
+
+    template<class O,void(*f)()>
+    using OnRise=RecState<OnRiseAction<O,f>>;
+
     //when pin falls
     template<class O,void(*f)()>
-    class OnFall:public O,protected virtual LastState {
+    class OnFallAction:public O,protected virtual LastState {
       public:
         inline operator bool() {return in();}
         inline bool in() {
           bool n=O::in();
-          if (!(n||n==O::getLast())) f();
+          if (!(n||n==getLast())) f();
           return n;
         }
     };
+
+    template<class O,void(*f)()>
+    class OnFallAction<RecState<O>,f>
+      :public OnFallAction<O,f> {};
+
+    template<class O,void(*f)()>
+    using OnFall=RecState<OnFallAction<O,f>>;
 
   }
 #endif

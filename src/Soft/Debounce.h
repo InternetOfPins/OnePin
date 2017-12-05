@@ -1,7 +1,7 @@
 /* -*- C++ -*- */
 
 //debounce the `on` state of a pin -- do we need this?
-template<class O,unsigned long delta>
+/*template<class O,unsigned long delta>
 class DebounceOn:public O,protected virtual LastState {
   public:
     inline bool in() {
@@ -15,12 +15,12 @@ class DebounceOn:public O,protected virtual LastState {
     inline operator bool() {return in();}
   protected:
     unsigned long lastOn=-delta;
-};
+};*/
 
 //-------------------------------------------------------------
 //debounce pin state change
 template<class O,unsigned long delta>
-class Debounce:public O,protected virtual LastState {
+class DebounceOnOff:public O,protected virtual LastState {
   public:
     inline bool in() {
       if (getMillis()-lastSet<delta) return getLast();
@@ -33,4 +33,8 @@ class Debounce:public O,protected virtual LastState {
 };
 
 template<class O,unsigned long delta>
-using Debouncer=Debounce<O,delta>;
+class DebounceOnOff<RecState<O>,delta>
+  :public DebounceOnOff<O,delta> {};
+
+template<class O,unsigned long delta>
+using Debouncer=RecState<DebounceOnOff<O,delta>>;

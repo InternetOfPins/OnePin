@@ -51,7 +51,6 @@ on the sequence of VirtualPins proposals done to Arduino framework
     template<class O>
     class OnePinHook:public OnePin  {
       public:
-        // VPin():pin(O()) {}
         OnePinHook(O& o):pin(o) {}
         void begin() override {pin.begin();}
         void modeOut() override {pin.modeOut();}

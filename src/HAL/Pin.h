@@ -154,5 +154,8 @@
     //remove LastState functionality (no-one else used it)
     template<class O>
     struct PinCap<LastState<O>>:public O {};
+    //sont self overlap functionality (however type overlaps)
+    template<class O>
+    struct PinCap<PinCap<O>>:public PinCap<O> {};
   }
 #endif

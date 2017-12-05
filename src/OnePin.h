@@ -40,9 +40,9 @@ on the sequence of VirtualPins proposals done to Arduino framework
         virtual bool in()=0;
         virtual bool rawIn()=0;
         virtual bool logicIn()=0;
-        template<bool T>
-        inline void set() {T?on():off();}//compiletime
-        inline void set(bool v) {v?on():off();}//runtime
+        // template<bool T>
+        // inline void set() {T?on():off();}//compiletime
+        // inline void set(bool v) {v?on():off();}//runtime
     };
     template<>inline void OnePin::mode<ModeOut>() {modeOut();}
     template<>inline void OnePin::mode<ModeIn>() {modeIn();}

@@ -73,7 +73,7 @@
       };
       template<class Port,int pin>
       struct PinBase:protected Port {
-        static inline void begin() {}
+        // static inline void begin() {}
         static inline void modeOut() {Port::template modeOut<pin>();}
         static inline void modeIn() {Port::template modeIn<pin>();}
         static inline void modeInUp() {Port::template modeInUp<pin>();}
@@ -81,14 +81,12 @@
         static inline bool rawIn() {return in();}
         static inline void on() {Port::template on<pin>();}
         static inline void off() {Port::template off<pin>();}
-        template<bool T>
-        static inline void set() {T?on():off();}
-        static inline void set(bool v) {v?on():off();}
       };
 
       template<class Port,int pin>
-      using Pin=LogicPinBase<PinBase<Port,pin<0?-pin:pin>,pin<0>;
+      using Pin=LastState<LogicPinBase<PinBase<Port,pin<0?-pin:pin>,pin<0>>;
 
+      //TODO: move begin to HAL/Pin.h avoiding the if!
       template<class Port,int pin>
       struct InputPin:public Pin<Port,pin> {
         static inline void begin() {

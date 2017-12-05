@@ -32,9 +32,6 @@
       static inline bool in() {return false;}
       static inline bool rawIn() {return in();}
       static inline bool logicIn() {return in();}
-      template<bool T>
-      static inline void set() {T?on():off();}//compiletime
-      static inline void set(bool v) {v?on():off();}//runtime
       // static inline void setLast(bool) {}
     } voidPin;//or its objective version
 
@@ -47,8 +44,6 @@
         static inline bool logicIn() {return in();}
         static inline void on() {isOn?O::off():O::on();}
         static inline void off() {isOn?O::on():O::off();}
-        static inline void tog() {O::set(!O::in());}
-        inline operator bool() {return in();}
     };
 
     // template<bool isOn>
@@ -57,18 +52,25 @@
     // };
 
     //store last pin state
-    class LastState {
+    template<class O>
+    class LastState:public O {
       protected:
-        inline bool getLast() {return lastState;}
-        inline bool setLast(bool v) {return lastState=v;}
-        bool lastState;
+        static inline bool getLast() {return lastState;}
+        static inline bool setLast(bool v) {return lastState=v;}
+        static bool lastState;
     };
+
+    template<class O>
+    bool LastState<O>::lastState;
 
     //pin state record, update last pin state after reading input
     template<class O>
-    class RecState:public O,protected virtual LastState {
+    class RecState:public O/*,protected virtual LastState<O>*/ {
       public:
-        inline bool in() {return setLast(O::in());}
+        //TODO: also record output changes!
+        static inline bool in() {return setLast(O::in());}
+        static inline void on() {O::on();setLast(true);}
+        static inline void off() {O::off();setLast(false);}
     };
 
     //avoid self stack
@@ -79,15 +81,16 @@
     //attach an action to pin change (input)
     //when pin changes
     template<class O,void(*f)()>
-    class OnChangeAction:public O,protected virtual LastState {
+    class OnChangeAction:public O/*,protected virtual LastState<O>*/ {
       public:
         OnChangeAction() {}
-        inline operator bool() {return in();}
-        inline bool in() {
+        static inline bool in() {
           bool n=O::in();
           if (n!=getLast()) f();
           return n;
         }
+        static inline void on() {O::on();if (!getLast()) f();}
+        static inline void off() {O::Off();if (getLast()) f();}
     };
 
     template<class O,void(*f)()>
@@ -99,14 +102,15 @@
 
     //when pin rises
     template<class O,void(*f)()>
-    class OnRiseAction:public O,protected virtual LastState {
+    class OnRiseAction:public O/*,protected virtual LastState<O>*/ {
       public:
-        inline operator bool() {return in();}
-        inline bool in() {
+        static inline bool in() {
           bool n=O::in();
           if (n&&n!=getLast()) f();
           return n;
         }
+        static inline void on() {O::on();if (!getLast()) f();}
+        static inline void off() {O::off();}
     };
 
     template<class O,void(*f)()>
@@ -118,14 +122,15 @@
 
     //when pin falls
     template<class O,void(*f)()>
-    class OnFallAction:public O,protected virtual LastState {
+    class OnFallAction:public O/*,protected virtual LastState<O>*/ {
       public:
-        inline operator bool() {return in();}
-        inline bool in() {
+        static inline bool in() {
           bool n=O::in();
           if (!(n||n==getLast())) f();
           return n;
         }
+        static inline void on() {O::on();}
+        static inline void off() {O::off();if (getLast()) f();}
     };
 
     template<class O,void(*f)()>
@@ -135,5 +140,19 @@
     template<class O,void(*f)()>
     using OnFall=RecState<OnFallAction<O,f>>;
 
+    //this is the top type layer of pin types, avoid duplication
+    //TODO wire this on top of all even when using just type level!
+    template<class O>
+    struct PinCap:public O {
+      static inline void begin() {O::begin();}
+      static inline void tog() {set(!in());}
+      template<bool T> static inline void set() {T?on():off();}//compiletime
+      inline operator bool() {return in();}
+      static inline void set(bool v) {v?on():off();}//runtime
+    };
+
+    //remove LastState functionality (no-one else used it)
+    template<class O>
+    struct PinCap<LastState<O>>:public O {};
   }
 #endif

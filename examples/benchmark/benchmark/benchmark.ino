@@ -2,9 +2,9 @@
 #include <OneArduino.h>
 
 using namespace OneLib;
-// using namespace OneLib::Avr;
+using namespace OneLib::Avr;
 using namespace OneLib::Avr::AtMega328p;
-using namespace OneLib::Arduino;
+// using namespace OneLib::Arduino;
 
 #define ENCBTN_PIN -4
 
@@ -12,7 +12,7 @@ typedef Avr::Pin<PortB,5> Led;//pin 13 on arduino
 Led _led;
 OnePinHook<Led> led(_led);
 
-typedef Pin<13> Pin13;
+typedef Arduino::Pin<13> Pin13;
 Pin13 _pin13;
 OnePinHook<Pin13> pin13(_pin13);
 
@@ -31,17 +31,52 @@ unsigned long test(auto f) {
   return cnt;
 }
 
-unsigned long test(const char* title,auto test0,auto test1,auto test2,auto test3) {
+bool valid[4][5][4]={
+  {
+    {0,0,0,0},
+    {0,1,1,1},
+    {0,1,1,1},
+    {0,1,1,1},
+    {0,1,1,1}
+  },
+  {
+    {0,0,0,0},
+    {0,1,0,0},
+    {0,1,1,1},
+    {0,1,1,1},
+    {0,1,0,1}
+  },
+  {
+    {0,0,0,0},
+    {0,1,0,0},
+    {0,1,1,1},
+    {0,1,1,1},
+    {0,1,0,1}
+  },
+  {
+    {0,0,0,0},
+    {0,1,0,0},
+    {0,1,1,1},
+    {0,1,1,1},
+    {0,1,0,1}
+  },
+};
+
+unsigned long test(int grp,int idx,const char* title,auto test0,auto test1,auto test2,auto test3) {
   Serial.print("|");
   Serial.print(title);
   Serial.print(":\t\t|");
-  Serial.print(test(test0));
+  int r0=test(test0);
+  Serial.print(valid[grp][idx][0]*r0);
   Serial.print("\t|");
-  Serial.print(test(test1));
+  int r1=test(test1);
+  Serial.print(valid[grp][idx][1]*r1);
   Serial.print("\t|");
-  Serial.print(test(test2));
+  int r2=test(test2);
+  Serial.print(valid[grp][idx][2]*r2);
   Serial.print("\t|");
-  Serial.print(test(test3));
+  int r3=test(test3);
+  Serial.print(valid[grp][idx][3]*r3);
   Serial.println("\t|");
 }
 
@@ -54,25 +89,31 @@ void test() {
   Serial.println("**Benchmark**");
   Serial.println("### Control");//------------------------------------
   head();//--------------------------------------------------------------------
-  test("Empty function",
+  test(0,0,"Empty function",
     [](){},
     [](){},
     [](){},
     [](){}
   );
-  test("Empty function",
+  test(0,1,"Empty function",
     [](){},
     [](){},
     [](){},
     [](){}
   );
-  test("Empty function",
+  test(0,2,"Empty function",
     [](){},
     [](){},
     [](){},
     [](){}
   );
-  test("Empty function",
+  test(0,3,"Empty function",
+    [](){},
+    [](){},
+    [](){},
+    [](){}
+  );
+  test(0,4,"Empty function",
     [](){},
     [](){},
     [](){},
@@ -80,100 +121,100 @@ void test() {
   );
   Serial.println("### pinMode");//------------------------------------
   head();//--------------------------------------------------------------------
-  test("Empty function",
+  test(1,0,"Empty function",
     [](){},
     [](){},
     [](){},
     [](){}
   );
-  test("Arduino pin mode",
+  test(1,1,"Arduino pin mode",
     [](){},
     [](){pinMode(13,INPUT);},
     [](){},
     [](){}
   );
-  test("OneLib Arduino mode",
+  test(1,2,"OneLib Arduino mode",
     [](){},
     [](){Pin13::modeIn();},
-    [](){Debouncer<Pin13,10>::modeIn();},
+    [](){PinCap<OneLib::Arduino::Debouncer<Pin13,10>>::modeIn();},
     [](){pin13.modeIn();}
   );
-  test("OneLib AVR mode",
+  test(1,3,"OneLib AVR mode",
     [](){},
     [](){Led::modeIn();},
-    [](){Debouncer<Led,10>::modeIn();},
+    [](){PinCap<OneLib::Arduino::Debouncer<Led,10>>::modeIn();},//yup raw Avr does not have a soft debouncer... it requires timming, still we can use arduiino timming
     [](){led.modeIn();}
   );
-  test("OneLib VoidPin mode",
+  test(1,4,"OneLib VoidPin mode",
     [](){},
     [](){VoidPin::modeIn();},
-    [](){Debouncer<VoidPin,10>::modeIn();},
+    [](){PinCap<OneLib::Arduino::Debouncer<VoidPin,10>>::modeIn();},
     [](){vvoidPin.modeIn();}
   );
 
   Serial.println("### digitalRead");//------------------------------------
   head();//--------------------------------------------------------------------
-  test("Empty function",
+  test(2,0,"Empty function",
     [](){},
     [](){},
     [](){},
     [](){}
   );
-  test("Arduino pin input",
+  test(2,1,"Arduino pin input",
     [](){},
     [](){digitalRead(13);},
     [](){},
     [](){}
   );
-  test("OneLib Arduino input",
+  test(2,2,"OneLib Arduino input",
     [](){},
     [](){Pin13().in();},
-    [](){Debouncer<Pin13,10>().in();},
+    [](){PinCap<OneLib::Arduino::Debouncer<Pin13,10>>::in();},
     [](){pin13.in();}
   );
-  test("OnePin AVR input",
+  test(2,3,"OnePin AVR input",
     [](){},
     [](){Led().in();},
-    [](){Debouncer<Led,10>().in();},
+    [](){},//PinCap<OneLib::Arduino::Debouncer<Led,10>>().in();},
     [](){led.in();}
   );
-  test("OneLib VoidPin input",
+  test(2,4,"OneLib VoidPin input",
     [](){},
     [](){VoidPin().in();},
-    [](){Debouncer<VoidPin,10>().in();},
+    [](){},
     [](){vvoidPin.in();}
   );
 
   Serial.println("### digitalWrite");//------------------------------------
   head();//--------------------------------------------------------------------
-  test("Empty function",
+  test(3,0,"Empty function",
     [](){},
     [](){},
     [](){},
     [](){}
   );
-  test("Arduino pin output",
+  test(3,1,"Arduino pin output",
     [](){},
     [](){digitalWrite(13,0);},
     [](){},
     [](){}
   );
-  test("OneLib Arduino output",
+  test(3,2,"OneLib Arduino output",
     [](){},
     [](){Pin13::off();},
-    [](){Debouncer<Pin13,10>::off();},
+    [](){PinCap<OneLib::Arduino::Debouncer<Pin13,10>>::off();},
     [](){pin13.off();}
   );
-  test("OnePin AVR output",
+  test(3,3,"OnePin AVR output",
     [](){},
     [](){Led::off();},
-    [](){Debouncer<Led,10>::off();},
+    [](){PinCap<OneLib::Arduino::Debouncer<Led,10>>::off();},
     [](){led.off();}
   );
-  test("OneLib VoidPin output",
+  test(3,4,"OneLib VoidPin output",
     [](){},
     [](){VoidPin::off();},
-    [](){Debouncer<VoidPin,10>::off();},
+    [](){},
     [](){vvoidPin.off();}
   );
 }

@@ -3,7 +3,7 @@
 using namespace OneLib;
 using namespace OneLib::Arduino;
 
-typedef OutputPin<LED_BUILTIN> Led;
+typedef PinCap<OutputPin<LED_BUILTIN>> Led;
 
 void setup() {
   Led::begin();

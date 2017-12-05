@@ -3,6 +3,7 @@
 #endif
 
 #include <OneAvr.h>
+#include <OneArduino.h>
 
 using namespace OneLib;
 using namespace OneLib::Avr;
@@ -13,7 +14,7 @@ void ledOff() {Serial.println("led is off");}
 
 //static hardware description
 typedef PinCap<OnRise<OnFall<OutputPin<PortB,5>,ledOff>,ledOn>> Led;//pin 13 on arduino
-typedef PinCap<InputPin<PortD,-4>> EncBtn;//with reverse logic included
+typedef PinCap<OneLib::Arduino::Debouncer<InputPin<PortD,-4>,10>> EncBtn;//with reverse logic included
 
 void setup() {
   Serial.begin(115200);
@@ -27,7 +28,6 @@ inline bool togFn(unsigned int on,unsigned int off) {return (millis()%(on+off))<
 
 //blink with no delay
 void loop() {
-  if (EncBtn()) Led::set(togFn(100,900));
+  if (EncBtn()) Led::set(togFn(10,90));
   else Led::set(togFn(500,500));
-  delay(100);
 }

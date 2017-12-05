@@ -8,8 +8,8 @@ template<unsigned int on,unsigned int off>
 inline bool tog() {return (millis()%(on+off))<on;}
 
 //static hardware description
-typedef OutputPin<PortB,5> Led1;//pin 13 on arduino
-typedef OutputPin<PortC,3> Led2;//pin A3 on arduino
+typedef PinCap<OutputPin<PortB,5>> Led1;//pin 13 on arduino
+typedef PinCap<OutputPin<PortC,3>> Led2;//pin A3 on arduino
 
 void setup() {
   Led1::begin();

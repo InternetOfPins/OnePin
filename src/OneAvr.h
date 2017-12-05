@@ -73,7 +73,7 @@
       };
       template<class Port,int pin>
       struct PinBase:protected Port {
-        // static inline void begin() {}
+        static inline void begin() {}
         static inline void modeOut() {Port::template modeOut<pin>();}
         static inline void modeIn() {Port::template modeIn<pin>();}
         static inline void modeInUp() {Port::template modeInUp<pin>();}

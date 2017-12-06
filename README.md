@@ -11,6 +11,7 @@ Meaning we require an existing framework.
 ## Purpose
 
 This is the logical complement of the internet of things, for this whole thing called internet came to the `thing`, usually in the form of an MCU. This thing that characterizes this `Things` on the internet its the ability to interact with the world, usually in the form of pins to control parts or read sensors.
+
 The InternetOfPins is to provide this last complement and fill the gap between the so called `thing` and its pins, and pins of pins and so on, opening a branch of interconnection between devices and signals to the external world as well as for benefits of the interconnected `things`
 
 ## Commitment

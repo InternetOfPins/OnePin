@@ -22,13 +22,6 @@ typedef SPIExt<SPI, LatchPin,1> SPI_8;//a set of 8 output pins
 //for the nature of the SPI register used this are output only
 //however the SPI protocol allows IO
 typedef PinCap<SPIPin<SPI_8,0>> SPILed;
-typedef PinCap<SPIPin<SPI_8,1>> SPILed;
-typedef PinCap<SPIPin<SPI_8,2>> SPILed;
-typedef PinCap<SPIPin<SPI_8,3>> SPILed;
-typedef PinCap<SPIPin<SPI_8,4>> SPILed;
-typedef PinCap<SPIPin<SPI_8,5>> SPILed;
-typedef PinCap<SPIPin<SPI_8,6>> SPILed;
-typedef PinCap<SPIPin<SPI_8,7>> SPILed;
 
 template<class
 class Record<

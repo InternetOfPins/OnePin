@@ -3,12 +3,25 @@
 
 Pin level meta-framework
 
+## What it is not.
+
+This is not a framework and therefor not a candidate to replace any framework.
+Meaning we require an existing framework.
+
 ## Purpose
 
-1. Provide zero cost abstraction to multiple pin frameworks.
-2. Abstract common concepts as logic level inversion.
-3. Provide pin composition on client side. Allows pin based libraries to abstract of pin details.
-4. Base for higher abstractions as pin routing and IoP (Internet of Pins)
+This is the logical complement of the internet of things, for this whole thing called internet came to the `thing`, usually in the form of an MCU. This thing that characterizes this `Things` on the internet its the ability to interact with the world, usually in the form of pins to control parts or read sensors.
+The InternetOfPins is to provide this last complement and fill the gap between the so called `thing` and its pins, and pins of pins and so on, opening a branch of interconnection between devices and signals to the external world as well as for benefits of the interconnected `things`
+
+## Commitment
+
+Do this approach not breaking with existing technologies and the vastness of priceless code, but using it on the most transparent and light way possible.
+
+Provide some uniformity for the sake of library development, allowing new developed code to have a wider range of usage.
+
+Use the new C++ features that allow or ease some tasks, but stay on a good compatibility level with most frameworks (C++11 for now)
+
+Do NOT sacrifice performance in vane.
 
 ## Motivation
 
@@ -20,6 +33,19 @@ Because current library development requires changing the library code in order 
 - Support same hardware connected over I²C, SPI or any other expansion port (⁺pin routing and virtual pins proposals).
 - Reverse logic, some libraries make an internal management of pin normal state. We need not.
 - Signal NA pins by using VoidPin, this abstraction removes pin output code.
+
+Enrich the embedded development with some extra connectivity, by providing abstraction of external pins but also allowing devices to publish direct or indirect owned pins, providing a flow path for pin information/signals.
+
+## Goals
+
+Touch this key areas a prove its feasibility.
+
+1. Provide zero cost abstraction to multiple pin frameworks, as required base to efficiently achieve the following points. ✔
+2. Abstract common concepts as logic level inversion. ✔
+3. Provide pin composition on client side. Allows pin based libraries to abstract of pin details. ✔
+4. Base for higher abstractions as pin routing and IoP (Internet of Pins) ✔
+5. Interface with externally compiled libraries on a non-type level ✔
+6. Non embedded version of IoP.
 
 ## Technique
 
@@ -35,7 +61,54 @@ By zero-cost we mean: the abstraction will either be absent or
 This class allows delivering a generic pin, breaking the template/mixin chain.
 _Libraries should use this type of pin_
 
+### Current state
+
+This is an ongoing work on a preliminary phase, so expect this documentation to be lagging.
+
+We are touching key aspects of the problem and proving its feasibility.
+Latter on this areas can be fine tunned and enlarged to support more cases.
+
+#### Zero cost-overlay.
+There is type level overlay of pin manipulation allowing set/read pin state and eventually setting pin mode.
+Because its a type level definition all deduction occurs at compile time, resulting on the direct call of underlining framework.
+
+It is possible fully manipulate the pins, setting modes, reading or write data from the type level
+
+**example:**
+
+Define the type of the pin.
+```c++
+typedef PinCap<OutputPin<13>> Led;
+```
+Initialize the pin, on some platforms/pin types its equivalent to set the pin mode, but on some hardware it generates no code.
+```c++
+Led::begin();
+```
+Setting the pin state
+```c++
+Led::on();
+```
+
+#### Abstract concepts as pin composition modules
+Some ubiquitous abstractions as logic level inversion are built in and available as a pin composition.
+Because of its nature, it provides a simple exclusive-or bit inversions when needed or transparently do the underling call, they are automatically included on every pin type.
+However it serves an an example because some other abstraction can and are provided this way, as pin composition modules.
+This composition is done on the program side and libraries need not know the details but all can use the pin.
+From the library of program side the pin has its uniform PinCap interface.
+**This id still at type level** see Features for a list on implemented compositions
+
+### IoP
+First preliminary module available, we can now use shift-register's pins wired over hardware SPI and use the pins to output data.
+
+Still we need to extend this to SPI Input and add some extra buses like I²C.
+
+This is only implemented for Arduino framework, still need to add more frameworks.
+
 ### Features
+
+#### PinCap
+Provide an uniform pin top layer at type level.
+
 
 #### VoidPin
 
@@ -63,7 +136,7 @@ Attaches a function to be called whenever the pin changes
 
 #### State record
 
-* RecState - updates the last state of a pin after read, this must be the top mixin
+* RecState - updates the last state of a pin after read, this must be the top mixin (before PinCap)
 
 Used by **soft-debunce** and **pin-change actions**.
 

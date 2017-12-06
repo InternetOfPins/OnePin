@@ -23,7 +23,7 @@ void setup() {
   EncBtn::begin();
 }
 
-//toggles on/off as specified in ms
+//toggles on/off as specified in ms, here using arduino function millis()
 inline bool togFn(unsigned int on,unsigned int off) {return (millis()%(on+off))<on;}
 
 //blink with no delay

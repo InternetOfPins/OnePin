@@ -52,5 +52,6 @@
         static inline void begin() {Pin<pin>::modeOut();}
       };
     };
+
   };//namespace OneLib
 #endif

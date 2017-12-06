@@ -1,12 +1,12 @@
 # OnePin
 
 
-Pin level meta-framework
+**Pin level meta-framework**
 
 ## What it is not.
 
 This is not a framework and therefor not a candidate to replace any framework.
-Meaning we require an existing framework.
+Meaning we require an existing one.
 
 ## Purpose
 
@@ -70,10 +70,10 @@ We are touching key aspects of the problem and proving its feasibility.
 Latter on this areas can be fine tunned and enlarged to support more cases.
 
 #### Zero cost-overlay.
-There is type level overlay of pin manipulation allowing set/read pin state and eventually setting pin mode.
+This is a type level overlay of pin manipulation, allowing set/read pin state and eventually setting pin mode.
 Because its a type level definition all deduction occurs at compile time, resulting on the direct call of underlining framework.
 
-It is possible fully manipulate the pins, setting modes, reading or write data from the type level
+It is possible fully manipulate the pins, setting modes, reading or write data from the type level.
 
 **example:**
 
@@ -98,12 +98,20 @@ This composition is done on the program side and libraries need not know the det
 From the library of program side the pin has its uniform PinCap interface.
 **This id still at type level** see Features for a list on implemented compositions
 
-### IoP
+#### IoP
 First preliminary module available, we can now use shift-register's pins wired over hardware SPI and use the pins to output data.
 
 Still we need to extend this to SPI Input and add some extra buses like I²C.
 
 This is only implemented for Arduino framework, still need to add more frameworks.
+
+#### Non-type level library interface
+Because libraries need not be compiled to match type level pin definition, a runtime overlay is provided.
+This only serves libraries coded for this generic overlay however.
+
+Previous approaches to this problem by patching existing frameworks was comprehensibly not accepted enthusiastically, because its a patch and would involve a performance burden, even if minimal. This approach would however make existing libraries use this routing capabilities with no required changes.
+
+The good part is that the approach is still available and does not collide with OnePin implementation, but can now benefit from it.
 
 ### Features
 

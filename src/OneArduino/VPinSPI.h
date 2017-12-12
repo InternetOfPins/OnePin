@@ -1,12 +1,18 @@
 /* -*- C++ -*- */
+/*
+This is the Arduino version of virtual SPI pins
+allowing onePin to target shift register pins over Arduino hardware SPI
+
+Rui Azevedo, Dec 2017
+ruihfazevedo@gmail.com
+*/
+
 #ifndef ARDUINO_VPINS_SPI_DEF_H
   #define ARDUINO_VPINS_SPI_DEF_H
 
   #include "OneLib.h"
   #include <Arduino.h>
   #include <SPI.h>
-
-  // typedef uint8_t bit:1;
 
   namespace OneLib {
     namespace Arduino {

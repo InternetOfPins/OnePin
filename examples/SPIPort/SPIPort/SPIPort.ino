@@ -1,17 +1,15 @@
-#ifdef DEBUG
-  #include <streamFlow.h>
-#endif
-
+/*
+Using SPI port output
+we can assign to multiple pins at the same time
+bringing the power of direct port output to OnePin lib
+*/
 #include <OneAvr.h>
 #include <OneArduino.h>
 #include <OneArduino/VPinSPI.h>
 
 using namespace OneLib;
-// using namespace OneLib::Avr;
-using namespace OneLib::Avr::AtMega328p;
 using namespace OneLib::Arduino;
 
-//use arduino pins over spi
 typedef PinCap<OutputPin<9>> LatchPin;
 typedef SPIExt<SPI, LatchPin,1> SPI_8;//a set of 8 output pins on shift register
 typedef PinCap<SPIPin<SPI_8,0,8>> SPIChip0;//using full 8 bits of shift register
@@ -23,11 +21,9 @@ void setup() {
   Serial.begin(115200);
   while(!Serial);
   SPI_8::begin();
-  Serial<<"OnePin dev simple"<<endl;
   PinCap<OutputPin<13>>::begin();
 }
 
 void loop() {
   SPIChip0::set(tog<1000,1000>()?0xFF:0x00);
-  // delay(100);
 }

@@ -96,7 +96,7 @@ Because of its nature, it provides a simple exclusive-or bit inversions when nee
 However it serves an an example because some other abstraction can and are provided this way, as pin composition modules.
 This composition is done on the program side and libraries need not know the details but all can use the pin.
 From the library of program side the pin has its uniform PinCap interface.
-**This id still at type level** see Features for a list on implemented compositions
+**This is still at type level** see Features for a list on implemented compositions
 
 #### IoP
 First preliminary module available, we can now use shift-register's pins wired over hardware SPI and use the pins to output data.

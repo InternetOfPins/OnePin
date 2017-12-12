@@ -147,9 +147,10 @@
       static inline void begin() {O::begin();}
       static inline void tog() {set(!O::in());}
       static inline void pulse() {tog();tog();}
-      template<bool T> static inline void set() {T?O::on():O::off();}//compiletime
-      inline operator bool() {return O::in();}
-      static inline void set(bool v) {v?O::on():O::off();}//runtime
+      // template<bool T> static inline void set() {T?O::on():O::off();}//compiletime
+      // inline operator bool() {return O::in();}
+      // static inline void set(bool v) {v?O::on():O::off();}//runtime
+      static inline void set(uint8_t v) {O::set(v);}
     };
 
     //remove LastState functionality (no-one else used it)

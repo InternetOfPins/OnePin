@@ -24,12 +24,16 @@ ruihfazevedo@gmail.com
             LatchPin::begin();
             spi.begin();
           }
-          template<uint8_t bit>
-          static inline bool in() {return BitPart<bit>::get(data);}
-          template<uint8_t bit>
-          static inline void on() {BitPart<bit>::on(data);}
-          template<uint8_t bit>
-          static inline void off() {BitPart<bit>::off(data);}
+          template<uint8_t bit,uint8_t nbits=1>
+          static inline bool in() {return BitPart<bit,nbits>::get(data);}
+          template<uint8_t bit,uint8_t nbits=1>
+          static inline uint8_t get() {return BitPart<bit,nbits>::get(data);}
+          template<uint8_t bit,uint8_t nbits=1>
+          static inline void on() {BitPart<bit,nbits>::on(data);}
+          template<uint8_t bit,uint8_t nbits=1>
+          static inline void off() {BitPart<bit,nbits>::off(data);}
+          template<uint8_t bit,uint8_t nbits=1>
+          static inline void set(uint8_t value) {BitPart<bit,nbits>::set(data,value);}
         protected:
           static uint8_t data[sz];
           static void io() {
@@ -42,12 +46,16 @@ ruihfazevedo@gmail.com
       template<SPIClass& spi,typename LatchPin,int sz>
       uint8_t SPIExt<spi,LatchPin,sz>::data[sz];
 
-      template<class SPIPort,int pin>
-      struct SPIPin:protected SPIPort {
+      template<class SPIExt,int pin,uint8_t nbits=1>
+      struct SPIPin:protected SPIExt {
         static inline void begin() {}
-        static inline bool in() {SPIPort::io();return SPIPort::template in<pin>();}
-        static inline void on() {SPIPort::template on<pin>();SPIPort::io();}
-        static inline void off() {SPIPort::template off<pin>();SPIPort::io();}
+        static inline bool in() {SPIExt::io();return SPIExt::template in<pin,nbits>();}
+        static inline uint8_t get() {SPIExt::io();SPIExt::template get<pin,nbits>();}
+        static inline void on() {SPIExt::template on<pin,nbits>();SPIExt::io();}
+        static inline void off() {SPIExt::template off<pin,nbits>();SPIExt::io();}
+        static inline void set(uint8_t value) {
+          SPIExt::template set<pin,nbits>(value);SPIExt::io();
+        }
       };
 
     };

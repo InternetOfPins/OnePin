@@ -231,6 +231,39 @@ void loop() {
 }
 ```
 
+### Virtual pins
+
+Using shift register pins over Arduino's hardware SPI port.
+
+```c++
+#include <OneArduino.h>
+#include <OneArduino/VPinSPI.h>
+
+using namespace OneLib;
+using namespace OneLib::Arduino;
+
+//use pin 9 as latch (transfer to output)
+typedef PinCap<OutputPin<9>> LatchPin;
+//describe SPI shift registers geometry
+typedef SPIExt<SPI, LatchPin,1> SPI_8;//a set of 8 output pins
+
+//allocate output pins from SPI shift registers SPI_8, bit 0
+typedef PinCap<SPIPin<SPI_8,0>> SPILed;
+
+void setup() {
+  //will init SPI and latch pin
+  SPI_8::begin();
+}
+
+void loop() {
+  SPILed::on();
+  delay(100);
+  SPILed::off();
+  delay(900);
+}
+
+```
+
 ## Generated code
 
 _this data can be outdated_

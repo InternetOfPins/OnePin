@@ -62,6 +62,9 @@ By zero-cost we mean: the abstraction will either be absent or represent the fun
 This class allows delivering a generic pin, breaking the template/mixin chain.
 _Libraries should use this type of pin_
 
+**OneBit**
+Bit operations, this allows specification of groups of pins and makes direct port output as easy as specifying a group of 8 bits.
+
 ### Current state
 
 This is an ongoing work on a preliminary phase, so expect this documentation to be lagging.

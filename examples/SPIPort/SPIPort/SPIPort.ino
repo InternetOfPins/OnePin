@@ -2,6 +2,8 @@
 Using SPI port output
 we can assign to multiple pins at the same time
 bringing the power of direct port output to OnePin lib
+
+on this example we blink the full shift-register at once
 */
 #include <OneAvr.h>
 #include <OneArduino.h>
@@ -25,5 +27,5 @@ void setup() {
 }
 
 void loop() {
-  SPIChip0::set(tog<1000,1000>()?0xFF:0x00);
+  SPIChip0::set(tog<500,500>()?0xFF:0x00);
 }

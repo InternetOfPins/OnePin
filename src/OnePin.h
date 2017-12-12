@@ -7,11 +7,10 @@ Along with the pin manipulation functions there are also a couple of composable
 utilities like debouncing or action coupling
 
 A top layer with virtual functions is provided for library abstracion over Pins
+OnePin is this break layer, breaking appart the type level abstracion from  a generic high level
 
 This is the base for IOP - The Internet Of Pins
 on the sequence of VirtualPins proposals done to Arduino framework
-
-
 */
 #ifndef ONE_PIN_DEF_H
   #define ONE_PIN_DEF_H

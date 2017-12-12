@@ -14,15 +14,16 @@
       #include "HAL/Mem.h"
       #include "HAL/Func.h"
       #include "HAL/Pin.h"
+      #include "OneBit.h"
 
       #include "Soft/Debounce.h"
       #include "Soft/Wire.h"
 
       #include "OnePin.h"
-      // #include "OneLib/Driver/Encoder.h"
-      // #include "OneLib/Driver/AccelEncoder.h"
-      // #include "OneLib/Driver/Button.h"
-      // #include "OneLib/Driver/ClickButton.h"
+      template<OneBit::Byte at, OneBit::Byte sz=1>
+      struct BitPart:public OneBit::BitPart<uint8_t,at,sz> {};
+      template<uint8_t data[]>
+      struct BitData:public OneBit::BitData<uint8_t,data> {};
 
       template<const int pin>
       struct PinBase {

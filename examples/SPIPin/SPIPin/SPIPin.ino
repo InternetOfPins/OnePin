@@ -6,7 +6,6 @@ to the shift register output pins and use that abstraction as a regular pin.
 
 */
 
-#include <SPI.h>
 #include <OneArduino.h>
 #include <OneArduino/VPinSPI.h>
 
@@ -23,10 +22,10 @@ typedef SPIExt<SPI, LatchPin,1> SPI_8;//a set of 8 output pins
 //however the SPI protocol allows IO
 typedef PinCap<SPIPin<SPI_8,0>> SPILed;
 
-template<class
-class Record<
-
 void setup() {
+  //just make sure that SPI activity does not jam programming
+  delay(500);
+  //will init SPI and latch pin
   SPI_8::begin();
 }
 

@@ -39,7 +39,7 @@ Enrich the embedded development with some extra connectivity, by providing abstr
 
 ## Goals
 
-Touch this key areas a prove its feasibility.
+Touch this key areas to prove its feasibility.
 
 1. Provide zero cost abstraction to multiple pin frameworks, as required base to efficiently achieve the following points. ✔
 2. Abstract common concepts as logic level inversion. ✔
@@ -52,7 +52,7 @@ Touch this key areas a prove its feasibility.
 
 Using c++ type level programming to overlay existing frameworks with zero-cost.
 
-By zero-cost we mean: the abstraction will either be absent or
+By zero-cost we mean: the abstraction will either be absent or represent the functionality.
 
 **Zero-cost** meta-programming with static inline functions.
 

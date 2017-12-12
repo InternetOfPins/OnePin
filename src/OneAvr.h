@@ -10,21 +10,23 @@
       #include "HAL/Mem.h"
       #include "HAL/Func.h"
       #include "HAL/Pin.h"
+      #include "OneBit.h"
 
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
       #include "Soft/Wire.h"
 
       #include "OnePin.h"
-      // #include "OneLib/Driver/Encoder.h"
-      // // #include "OneLib/Driver/AccelEncoder.h"//avr has no millis functions, so cant have this
-      // #include "OneLib/Driver/Button.h"
-      // // #include "OneLib/Driver/ClickButton.h"//avr has no millis functions, so cant have this
+
+      template<OneBit::Byte at, OneBit::Byte sz=1>
+      struct BitPart:public OneBit::BitPart<uint8_t,at,sz> {};
+      template<uint8_t data[]>
+      struct BitData:public OneBit::BitData<uint8_t,data> {};
 
       // hardwired code
       template<uint8_t reg>
       struct Reg:protected Mem<uint8_t> {
-        static inline uint8_t get() {return Mem::get(reg);}
-        static inline uint8_t set(uint8_t v) {return Mem::set(reg,v);}
+        static inline uint8_t get() {return Mem::get((uint8_t*)reg);}
+        static inline uint8_t set(uint8_t v) {return Mem::set((uint8_t*)reg,v);}
         template<uint8_t bit> static inline void on() {(*(uint8_t*)reg)|=1<<bit;}
         template<uint8_t bit> static inline void off() {(*(uint8_t*)reg)&=~(1<<bit);}
         template<uint8_t bit> static inline bool in() {return (*(uint8_t*)reg)&(1<<bit);}

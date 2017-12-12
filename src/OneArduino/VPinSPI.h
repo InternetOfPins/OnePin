@@ -19,11 +19,11 @@
             spi.begin();
           }
           template<uint8_t bit>
-          static inline bool in() {return 1&(data[bit>>3]>>(0b111&bit));}
+          static inline bool in() {return BitPart<bit>::get(data);}
           template<uint8_t bit>
-          static inline void on() {data[bit>>3]|=1<<(0b111&bit);}
+          static inline void on() {BitPart<bit>::on(data);}
           template<uint8_t bit>
-          static inline void off() {data[bit>>3]&=~(1<<(0b111&bit));}
+          static inline void off() {BitPart<bit>::off(data);}
         protected:
           static uint8_t data[sz];
           static void io() {

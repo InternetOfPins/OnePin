@@ -6,8 +6,8 @@
     //memory handler --------------------------------------------------------
     template<class T>
     struct Mem {
-      static inline T get(const T* addr) {return *addr;}
-      static inline T set(T* addr,const T v) {return *addr=v;}
+      static inline T memGet(const T* addr) {return *addr;}
+      static inline T memSet(T* addr,const T v) {return *addr=v;}
     };
   // }
 // #endif

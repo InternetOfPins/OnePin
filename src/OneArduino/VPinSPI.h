@@ -10,7 +10,7 @@ ruihfazevedo@gmail.com
 #ifndef ARDUINO_VPINS_SPI_DEF_H
   #define ARDUINO_VPINS_SPI_DEF_H
 
-  #include "OneLib.h"
+  // #include "OneLib.h"
   #include <Arduino.h>
   #include <SPI.h>
 
@@ -46,15 +46,15 @@ ruihfazevedo@gmail.com
       template<SPIClass& spi,typename LatchPin,int sz>
       uint8_t SPIExt<spi,LatchPin,sz>::data[sz];
 
-      template<class SPIExt,int pin,uint8_t nbits=1>
+      template<class SPIExt,int bit,uint8_t nbits=1>
       struct SPIPin:protected SPIExt {
         static inline void begin() {}
-        static inline bool in() {SPIExt::io();return SPIExt::template in<pin,nbits>();}
-        static inline uint8_t get() {SPIExt::io();SPIExt::template get<pin,nbits>();}
-        static inline void on() {SPIExt::template on<pin,nbits>();SPIExt::io();}
-        static inline void off() {SPIExt::template off<pin,nbits>();SPIExt::io();}
+        static inline bool in() {SPIExt::io();return SPIExt::template in<bit,nbits>();}
+        static inline uint8_t get() {SPIExt::io();return SPIExt::template get<bit,nbits>();}
+        static inline void on() {SPIExt::template on<bit,nbits>();SPIExt::io();}
+        static inline void off() {SPIExt::template off<bit,nbits>();SPIExt::io();}
         static inline void set(uint8_t value) {
-          SPIExt::template set<pin,nbits>(value);SPIExt::io();
+          SPIExt::template set<bit,nbits>(value);SPIExt::io();
         }
       };
 

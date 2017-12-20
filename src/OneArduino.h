@@ -2,7 +2,7 @@
 #ifndef ONELIB_ARDUINO_DEF
   #define ONELIB_ARDUINO_DEF
 
-#include "OneLib.h"
+// #include "OneLib.h"
 
   namespace OneLib {
     namespace Arduino {
@@ -19,7 +19,7 @@
       #include "Soft/Debounce.h"
       #include "Soft/Wire.h"
 
-      #include "OnePin.h"
+      // #include "OnePin.h"
       template<OneBit::Byte at, OneBit::Byte sz=1>
       struct BitPart:public OneBit::BitPart<uint8_t,at,sz> {};
       template<uint8_t data[]>

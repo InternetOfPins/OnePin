@@ -2,7 +2,7 @@
 #ifndef ONELIB_AVR_DEF
   #define ONELIB_AVR_DEF
 
-#include "OneLib.h"
+// #include "OneLib.h"
 
   namespace OneLib {
     namespace Avr {
@@ -15,7 +15,7 @@
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
       #include "Soft/Wire.h"
 
-      #include "OnePin.h"
+      // #include "OnePin.h"
 
       template<OneBit::Byte at, OneBit::Byte sz=1>
       struct BitPart:public OneBit::BitPart<uint8_t,at,sz> {};
@@ -25,8 +25,8 @@
       // hardwired code
       template<uint8_t reg>
       struct Reg:protected Mem<uint8_t> {
-        static inline uint8_t get() {return Mem::get((uint8_t*)reg);}
-        static inline uint8_t set(uint8_t v) {return Mem::set((uint8_t*)reg,v);}
+        static inline uint8_t get() {return Mem::memGet((uint8_t*)reg);}
+        static inline uint8_t set(uint8_t v) {return Mem::memSet((uint8_t*)reg,v);}
         template<uint8_t bit> static inline void on() {(*(uint8_t*)reg)|=1<<bit;}
         template<uint8_t bit> static inline void off() {(*(uint8_t*)reg)&=~(1<<bit);}
         template<uint8_t bit> static inline bool in() {return (*(uint8_t*)reg)&(1<<bit);}

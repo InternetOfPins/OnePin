@@ -1,8 +1,8 @@
 /* -*- C++ -*- */
-#ifndef ONEPIN_DEF
-  #define ONEPIN_DEF
+// #ifndef ONEPIN_DEF
+//   #define ONEPIN_DEF
 
-  namespace OneLib {
+  // namespace OneLib {
 
     // class Framework {
     //   public:
@@ -159,5 +159,5 @@
     //dont self overlap functionality (however type overlaps)
     template<class O>
     struct PinCap<PinCap<O>>:public PinCap<O> {};
-  }
-#endif
+  // }
+// #endif

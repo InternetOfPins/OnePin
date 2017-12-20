@@ -5,6 +5,8 @@
 using namespace std;
 using namespace OneBit;
 
+uint8_t data[]={0b11111111,0b11101011};
+
 int main() {
   cout<<"Testing OneBit"<<endl;
   cout<<"test bpu - bits per unit ------------"<<endl;
@@ -48,7 +50,6 @@ int main() {
   cout<<"12:"<<(int)Bits<uint8_t>::pos(12)<<endl;
 
   cout<<"get ------------"<<endl;
-  uint8_t data[]={0b11111111,0b11101011};
   cout<<"0,3:"<<bitset<8>(Bits<uint8_t>::get(data,0,3))<<endl;
   cout<<"2,4:"<<bitset<8>(Bits<uint8_t>::get(data,2,4))<<endl;
   cout<<"8,4:"<<bitset<8>(Bits<uint8_t>::get(data,8,4))<<endl;
@@ -97,9 +98,8 @@ int main() {
   cout<<"set 0xff:"<<bitset<8>(data[1])<<" "<<bitset<8>(data[0])<<endl;
   cout<<"get:"<<bitset<8>(M::get(data))<<endl;
 
-  Byte t[2];
-  // {0,0};
-  typedef BitField<uint8_t,1,6,&t> Md;
+  cout<<"BitField ------------"<<endl;
+  typedef BitField<uint8_t,data,4,8> Md;
   cout<<"get:"<<bitset<8>(Md::get())<<endl;
 
 }

@@ -55,7 +55,7 @@ namespace OneBit {
 
   };
 
-  // a sequence of bits
+  // a sequence of bits on arbitrary data
   template<typename Unit,Byte at, Byte sz=1>
   struct BitPart {
     constexpr static inline Unit get(Unit data[]) {
@@ -72,54 +72,33 @@ namespace OneBit {
     }
   };
 
-  template<typename Unit,Byte at,Byte sz,Unit* data>
-  struct BitField:BitPart<Unit,at,sz> {
-    constexpr static inline Unit get() {
-      return BitPart<Unit,at,sz>::get(data);
+  // just an array of data with functions to work with bits
+  template<typename Unit,Unit data[]>
+  struct BitData {
+
+    constexpr static inline Unit get(Byte at,Byte sz) {
+      return Bits<Unit>::get(data,at,sz);
+    }
+
+    template<Byte at, Byte sz=1>
+    constexpr static inline Unit get() {return BitPart<Unit,at,sz>::get(data);}
+
+    constexpr static inline void set(Byte at,Byte sz,Unit value) {
+      return Bits<Unit>::set(data,at,sz,value);
+    }
+
+    template<Byte at, Byte sz=1>
+    constexpr static inline void set(Unit value) {
+      return BitPart<Unit,at,sz>::set(data,value);
     }
   };
 
-  //sequence of sz bits
-  // template<typename Unit,Unit data[]>
-  // struct BitData {
-  //
-  //   constexpr static inline Unit get(Byte at,Byte sz) {
-  //     return Bits<Unit>::get(data,at,sz);
-  //   }
-  //
-  //   template<Byte at, Byte sz=1>
-  //   constexpr static inline Unit get() {return BitPart<Unit,at,sz>::get(data);}
-  //
-  //   constexpr static inline void set(Byte at,Byte sz,Unit value) {
-  //     return Bits<Unit>::set(data,at,sz,value);
-  //   }
-  //
-  //   template<Byte at, Byte sz=1>
-  //   constexpr static inline void set(Unit value) {
-  //     return BitPart<Unit,at,sz>::set(data,value);
-  //   }
-  // };
-  // template<typename Unit, Unit data*,Byte at, Byte sz=1>
-  // struct BitField:public BitPart<Unit,at,sz> {
-  //   constexpr static inline Unit get() {return BitPart<Unit,at,sz>::get(data);}
-  //   constexpr static inline void on() {BitPart<Unit,at,sz>::on(data);}
-  //   constexpr static inline void off() {BitPart<Unit,at,sz>::off(data);}
-  //   constexpr static inline void set(Unit value) {BitPart<Unit,at,sz>::set(data,value);}
-  // };
+  template<typename Unit, Unit data[],Byte at, Byte sz=1>
+  struct BitField:public BitPart<Unit,at,sz> {
+    constexpr static inline Unit get() {return BitPart<Unit,at,sz>::get(data);}
+    constexpr static inline void on() {BitPart<Unit,at,sz>::on(data);}
+    constexpr static inline void off() {BitPart<Unit,at,sz>::off(data);}
+    constexpr static inline void set(Unit value) {BitPart<Unit,at,sz>::set(data,value);}
+  };
 
 };
-
-//use case-----------------
-/*typedef BitPart<uint8_t,20,4> Test;
-uint8_t data[3]={0,0,0};
-typedef BitData<uint8_t,data> BitData24;
-
-void setup() {
-  Serial.begin(115200);
-  while(!Serial);
-  Serial<<"The thing"<<endl;
-  // Test::set(data,0b1001);
-  BitData24::set<20,4>(0b1011);
-  Serial<<bin(BitData24::get<20,4>())<<endl;
-}
-*/

@@ -11,10 +11,11 @@
 
       inline unsigned long getMillis() {return millis();}
 
+      #include <OneBit.h>
+
       #include "HAL/Mem.h"
       #include "HAL/Func.h"
       #include "HAL/Pin.h"
-      #include "OneBit.h"
 
       #include "Soft/Debounce.h"
       #include "Soft/Wire.h"

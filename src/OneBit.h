@@ -15,29 +15,30 @@ namespace OneBit {
 
   //bit operations within a bit field
   //operations get/set, on/off can cross bounds between units
-  template<typename Unit>
+  //bit fields size can even exceed unit size
+  template<typename Unit,typename Value=Unit>
   struct Bits {
     //bits per unit
     constexpr static inline Byte bpu() {return sizeof(Unit)<<3;}
     //address bits per unit
     constexpr static inline Byte abpu() {return log2(bpu());}
     //max representable value
-    constexpr static inline Unit ones(Unit sz) {return (1<<sz)-1;}
+    constexpr static inline Value ones(Byte sz) {return (1<<sz)-1;}
     //mask
-    constexpr static inline Unit mask(Byte bit=0,Byte sz=1) {return ones(sz)<<bit;}
+    constexpr static inline Value mask(Byte at=0,Byte sz=1) {return ones(sz)<<at;}
     //unit index
     constexpr static inline Byte idx(Byte at) {return at>>abpu();}
     //bit address inside unit
     constexpr static inline Byte pos(Byte at) {return at&(ones(abpu()));}
     //get bit-field value
-    constexpr static inline Unit get(Unit data[],Byte at,Byte sz) {
-      // static_assert(sz<=bpu(),"bits field is limited to unit size");
+    constexpr static inline Value get(Unit data[],Byte at,Byte sz) {
       return (pos(at)+sz)>bpu()?//crossing bounds
         get(data,at,bpu()-pos(at))|get(data,at+(bpu()-pos(at)),sz-(bpu()-pos(at)))<<(bpu()-pos(at)):
         (data[idx(at)]>>pos(at))&(ones(sz));
     }
+
     //set bit-field value
-    constexpr static inline void set(Unit data[],Byte at,Byte sz,Unit value) {
+    constexpr static inline void set(Unit data[],Byte at,Byte sz,Value value) {
       Unit m=mask(pos(at),sz);
       if ((pos(at)+sz)>bpu()) {//crossing bounds
         set(data,at,bpu()-pos(at),value);
@@ -56,49 +57,51 @@ namespace OneBit {
   };
 
   // a sequence of bits on arbitrary data
-  template<typename Unit,Byte at, Byte sz=1>
+  template<typename Unit,Byte at, Byte sz=1,typename Value=Unit>
   struct BitPart {
-    constexpr static inline Unit get(Unit data[]) {
-      return Bits<Unit>::get(data,at,sz);
+    constexpr static inline Value get(Unit data[]) {
+      return Bits<Unit,Value>::get(data,at,sz);
     }
     constexpr static inline void on(Unit data[]) {
-      Bits<Unit>::on(data,at);
+      Bits<Unit,Value>::on(data,at);
     }
     constexpr static inline void off(Unit data[]) {
-      Bits<Unit>::off(data,at);
+      Bits<Unit,Value>::off(data,at);
     }
-    constexpr static inline void set(Unit data[],Unit value) {
-      Bits<Unit>::set(data,at,sz,value);
+    constexpr static inline void set(Unit data[],Value value) {
+      Bits<Unit,Value>::set(data,at,sz,value);
     }
   };
 
   // just an array of data with functions to work with bits
-  template<typename Unit,Unit data[]>
+  template<typename Unit,Unit data[],typename Value=Unit>
   struct BitData {
 
-    constexpr static inline Unit get(Byte at,Byte sz) {
-      return Bits<Unit>::get(data,at,sz);
+    constexpr static inline Value get(Byte at,Byte sz) {
+      return Bits<Unit,Value>::get(data,at,sz);
     }
 
     template<Byte at, Byte sz=1>
-    constexpr static inline Unit get() {return BitPart<Unit,at,sz>::get(data);}
+    constexpr static inline Value get() {
+      return BitPart<Unit,at,sz,Value>::get(data);
+    }
 
-    constexpr static inline void set(Byte at,Byte sz,Unit value) {
-      return Bits<Unit>::set(data,at,sz,value);
+    constexpr static inline void set(Byte at,Byte sz,Value value) {
+      return Bits<Unit,Value>::set(data,at,sz,value);
     }
 
     template<Byte at, Byte sz=1>
-    constexpr static inline void set(Unit value) {
-      return BitPart<Unit,at,sz>::set(data,value);
+    constexpr static inline void set(Value value) {
+      return BitPart<Unit,at,sz,Value>::set(data,value);
     }
   };
 
-  template<typename Unit, Unit data[],Byte at, Byte sz=1>
+  template<typename Unit, Unit data[],Byte at, Byte sz=1,typename Value=Unit>
   struct BitField:public BitPart<Unit,at,sz> {
-    constexpr static inline Unit get() {return BitPart<Unit,at,sz>::get(data);}
-    constexpr static inline void on() {BitPart<Unit,at,sz>::on(data);}
-    constexpr static inline void off() {BitPart<Unit,at,sz>::off(data);}
-    constexpr static inline void set(Unit value) {BitPart<Unit,at,sz>::set(data,value);}
+    constexpr static inline Value get() {return BitPart<Unit,at,sz,Value>::get(data);}
+    constexpr static inline void on() {BitPart<Unit,at,sz,Value>::on(data);}
+    constexpr static inline void off() {BitPart<Unit,at,sz,Value>::off(data);}
+    constexpr static inline void set(Value value) {BitPart<Unit,at,sz,Value>::set(data,value);}
   };
 
 };

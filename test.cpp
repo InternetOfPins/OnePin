@@ -93,13 +93,13 @@ int main() {
   cout<<"6,4=0xf:"<<bitset<8>(data[1])<<" "<<bitset<8>(data[0])<<endl;
 
   cout<<"BitPart ------------"<<endl;
-  typedef BitPart<uint8_t,4,8> M;
-  M::set(data,0b11000011);
-  cout<<"set 0xff:"<<bitset<8>(data[1])<<" "<<bitset<8>(data[0])<<endl;
-  cout<<"get:"<<bitset<8>(M::get(data))<<endl;
+  typedef BitPart<uint8_t,0,16,uint16_t> M;
+  M::set(data,0b1111110000111111);
+  cout<<"set 0b1111110000111111:"<<bitset<8>(data[1])<<" "<<bitset<8>(data[0])<<endl;
+  cout<<"get:"<<bitset<16>(M::get(data))<<endl;
 
   cout<<"BitField ------------"<<endl;
-  typedef BitField<uint8_t,data,4,8> Md;
-  cout<<"get:"<<bitset<8>(Md::get())<<endl;
+  typedef BitField<uint8_t,data,0,16,uint16_t> Md;
+  cout<<"get:"<<bitset<16>(Md::get())<<endl;
 
 }

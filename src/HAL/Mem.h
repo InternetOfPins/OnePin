@@ -1,13 +1,16 @@
 /* -*- C++ -*- */
 // #ifndef ONEMEM_DEF
 //   #define ONEMEM_DEF
+//
+//   namespace OneLib {
 
-  // namespace OneLib {
+    // #include <OneBit.h>
+
     //memory handler --------------------------------------------------------
     template<class T>
     struct Mem {
-      static inline T memGet(const T* addr) {return *addr;}
-      static inline T memSet(T* addr,const T v) {return *addr=v;}
+      constexpr static inline T get(const T* addr) {return *addr;}
+      constexpr static inline T set(T* addr,const T v) {return *addr=v;}
     };
-  // }
+//   }
 // #endif

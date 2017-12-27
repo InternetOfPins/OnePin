@@ -17,118 +17,162 @@
 
       // #include "OnePin.h"
 
-      template<OneBit::Byte at, OneBit::Byte sz=1>
-      struct BitPart:public OneBit::BitPart<uint8_t,at,sz> {};
-      template<uint8_t data[]>
-      struct BitData:public OneBit::BitData<uint8_t,data> {};
+      //bit-fields base is one byte on avrs (8 bit mcus)
+      template<size_t data,OneBit::Byte at=0, OneBit::Byte sz=1>
+      using BitField=OneBit::BitField<uint8_t,data,at,sz>;
 
-      // hardwired code
-      template<uint8_t reg>
-      struct Reg:protected Mem<uint8_t> {
-        static inline uint8_t get() {return Mem::memGet((uint8_t*)reg);}
-        static inline uint8_t set(uint8_t v) {return Mem::memSet((uint8_t*)reg,v);}
-        template<uint8_t bit> static inline void on() {(*(uint8_t*)reg)|=1<<bit;}
-        template<uint8_t bit> static inline void off() {(*(uint8_t*)reg)&=~(1<<bit);}
-        template<uint8_t bit> static inline bool in() {return (*(uint8_t*)reg)&(1<<bit);}
-      };
+      //access avr port registers from a base address
+      template<uint8_t base,uint8_t at=0,uint8_t sz=8>
+      using In = BitField<base,at,sz>;
+      template<uint8_t base,uint8_t at=0,uint8_t sz=8>
+      using Mode = BitField<base+1,at,sz>;
+      template<uint8_t base,uint8_t at=0,uint8_t sz=8>
+      using Out = BitField<base+2,at,sz>;
 
-      template<uint8_t base> using In = Avr::Reg<base>;
-      template<uint8_t base> using Mode = Avr::Reg<base+1>;
-      template<uint8_t base> using Out = Avr::Reg<base+2>;
-
-      template<uint8_t base>
+      template<uint8_t base,uint8_t at=0,uint8_t sz=8>
       struct Port:
-        protected In<base>,
-        protected Mode<base>,
-        protected Out<base>
+        protected In<base,at,sz>,
+        protected Mode<base,at,sz>,
+        protected Out<base,at,sz>
       {
-        static inline uint8_t mode() {return Mode<base>::get();}
-        static inline void mode(uint8_t m) {Mode<base>::set(m);}
-        static inline uint8_t in() {return In<base>::get();}
-        static inline void out(uint8_t data) {Out<base>::set(data);}
+        static inline uint8_t mode() {return Mode<base,at,sz>::get();}
+        static inline void mode(uint8_t m) {Mode<base,at,sz>::set(m);}
+        static inline uint8_t in() {return In<base,at,sz>::get();}
+        static inline void out(uint8_t data) {Out<base,at,sz>::set(data);}
 
-        template<uint8_t bit>
-        static inline void modeOut() {Mode<base>::template on<bit>();}
-        template<uint8_t bit>
+        static inline void modeOut() {Mode<base,at,sz>::on();}
         static inline void modeIn() {
-          Mode<base>::template off<bit>();
-          Out<base>::template off<bit>();
+          Mode<base,at,sz>::off();
+          Out<base,at,sz>::off();
         }
-        template<uint8_t bit>
         static inline void modeInUp() {
-          Mode<base>::template off<bit>();
-          Out<base>::template on<bit>();
+          Mode<base,at,sz>::off();
+          Out<base,at,sz>::on();
         }
-        template<uint8_t bit>
         static inline void modeOff() {
-          Mode<base>::template off<bit>();
-          Out<base>::template off<bit>();
+          Mode<base,at,sz>::off();
+          Out<base,at,sz>::off();
         }
-        template<uint8_t bit>
-        static inline void on() {Out<base>::template on<bit>();}
-        template<uint8_t bit>
-        static inline void off() {Out<base>::template off<bit>();}
+        static inline void on() {Out<base,at,sz>::on();}
+        static inline void off() {Out<base,at,sz>::off();}
 
-        template<uint8_t bit>
-        static inline bool in() {return In<base>::template in<bit>();}
-
-      };
-      template<class Port,int pin>
-      struct PinBase:protected Port {
         static inline void begin() {}
-        static inline void modeOut() {Port::template modeOut<pin>();}
-        static inline void modeIn() {Port::template modeIn<pin>();}
-        static inline void modeInUp() {Port::template modeInUp<pin>();}
-        static inline bool in() {return Port::template in<pin>();}
-        static inline bool rawIn() {return in();}
-        static inline void on() {Port::template on<pin>();}
-        static inline void off() {Port::template off<pin>();}
+        static inline uint8_t rawIn() {return in();}
       };
 
-      template<class Port,int pin>
-      using Pin=LastState<LogicPinBase<PinBase<Port,pin<0?-pin:pin>,pin<0>>;
+      template<size_t addr,int pin,int8_t sz=1>
+      struct PinBase:public Port<addr,pin,sz> {
+        static inline void begin() {}
+        static inline uint8_t rawIn() {return Port<addr,pin,sz>::in();}
+      };
+
+      template<size_t addr,int pin,uint8_t sz=1>
+      using Pin=LastState<LogicPinBase<PinBase<addr,pin<0?-pin:pin,sz>,(pin<0)>>;
 
       //TODO: move begin to HAL/Pin.h avoiding the if!
-      template<class Port,int pin>
-      struct InputPin:public Pin<Port,pin> {
+      template<size_t addr,int pin,uint8_t sz>
+      struct InputPin:public Pin<addr,pin,sz> {
         static inline void begin() {
-          if (pin<0) Pin<Port,pin>::modeInUp();
-          else Pin<Port,pin>::modeIn();
+          if (pin<0) Pin<addr,pin,sz>::modeInUp();
+          else Pin<addr,pin,sz>::modeIn();
         }
       };
 
-      template<class Port,int pin>
-      struct OutputPin:public Pin<Port,pin> {
-        static inline void begin() {Pin<Port,pin>::modeOut();}
+      template<size_t addr,int pin,uint8_t sz>
+      struct OutputPin:public Pin<addr,pin,sz> {
+        static inline void begin() {Pin<addr,pin,sz>::modeOut();}
       };
+
+      // template<uint8_t* pinToPort_table,uint8_t* pinToBit_table>
+      // struct ArduinoPins {
+      //   constexpr static inline uint8_t pinToPort(int pin) {
+      //     return pinToPort_table[pin<0?-pin:pin];
+      //   }
+      //   constexpr static inline uint8_t pinToBit(int pin) {
+      //     return pin<0?-pinToBit_table[-pin]:pinToBit_table[pin];
+      //   }
+      //   template<int8_t pin,uint8_t sz=1>
+      //   using Pin =Avr::Pin<pinToPort(pin),pinToBit(pin),sz>;
+      //   template<int8_t pin,uint8_t sz=1>
+      //   using InputPin = Avr::InputPin<pinToPort(pin),pinToBit(pin),sz>;
+      //   template<int8_t pin,uint8_t sz=1>
+      //   using OutputPin =Avr::OutputPin<pinToPort(pin),pinToBit(pin),sz>;
+      // };
 
       //Example of MCU ports/pins zero-cost abstraction
       //all this defs go only on compile time
-      namespace AtMega328p {
-        typedef Avr::Port<0x23> PortB;
-        typedef Avr::Port<0x26> PortC;
-        typedef Avr::Port<0x29> PortD;
+      namespace AtMega328 {
+        enum Ports:uint8_t {portB=0x23,portC=0x26,portD=0x29};
         namespace ArduinoPins {
-          constexpr uint8_t pinToPort[]={
-            0x29,0x29,0x29,0x29,0x29,0x29,0x29,0x29,
-            0x23,0x23,0x23,0x23,0x23,0x23,
-            0x26,0x26,0x26,0x26,0x26,0x26
+          constexpr static uint8_t pinToPort_table[]={
+            portD,portD,portD,portD,portD,portD,portD,portD,
+            portB,portB,portB,portB,portB,
+            portC,portC,portC,portC,portC
           };
-          constexpr uint8_t pinToBit[]={
+          constexpr static uint8_t pinToBit_table[]={
             0,1,2,3,4,5,6,7,
             0,1,2,3,4,5,
             0,1,2,3,4,5
           };
-          template<int8_t pin>
-          using Pin = Avr::Pin<Avr::Port<pinToPort[pin<0?-pin:pin]>,pin<0?-pinToBit[pin<0?-pin:pin]:pinToBit[pin<0?-pin:pin]>;
-          template<int8_t pin>
-          using InputPin = Avr::InputPin<Avr::Port<pinToPort[pin<0?-pin:pin]>,pin<0?-pinToBit[pin<0?-pin:pin]:pinToBit[pin<0?-pin:pin]>;
-          template<int8_t pin>
-          using OutputPin = Avr::OutputPin<Avr::Port<pinToPort[pin<0?-pin:pin]>,pin<0?-pinToBit[pin<0?-pin:pin]:pinToBit[pin<0?-pin:pin]>;
-        }
-      };
+          #include "ArduinoPins.h"
+        };//namespace ArduinoPins
+      };//namespace AtMega328p
 
-    };
+      namespace AtTinyX5 {
+        //TODO: check this info!
+        enum Ports:uint8_t {portB=0x36};
+        namespace ArduinoPins {
+          constexpr static uint8_t pinToPort_table[]={portB,portB,portB,portB,portB};
+          constexpr static uint8_t pinToBit_table[]={0,1,2,3,4};
+          #include "ArduinoPins.h"
+        };//namespace ArduinoPins
+      };//namespace AtTiny
+
+      namespace AtTinyX4 {
+        //TODO: check this info!
+        enum Ports:uint8_t {portB=0x36,portA=0x39};
+        namespace ArduinoPins {
+          constexpr static uint8_t pinToPort_table[]={
+            portB,portB,portB,portB,portB,portB,
+            portA,portA,portA,portA,portA
+          };
+          constexpr static uint8_t pinToBit_table[]={
+            0,1,2,3,4,5,
+            6,7,2,1,0
+
+          };
+          #include "ArduinoPins.h"
+        };//namespace ArduinoPins
+      };//namespace AtTiny
+
+      namespace AtTinyX8 {
+        //TODO: check this info!
+        enum Ports:uint8_t {portB=0x23,portC=0x26,portD=0x29,portA=0x2C};
+        namespace ArduinoPins {
+          constexpr static uint8_t pinToPort_table[]={
+            portD,portD,portD,portD,portD,portD,portD,portD,
+            portB,portB,portB,portB,portB,portB,portB,portB,
+            portC,portC,portC,portC,portC,portC,portC,
+          };
+          constexpr static uint8_t pinToBit_table[]={
+            0,1,2,3,4,5,6,7,
+            0,1,2,3,4,5,6,7,
+            7,0,1,2,3,4,5
+          };
+          #include "ArduinoPins.h"
+        };//namespace ArduinoPins
+      };//namespace AtTiny
+
+      namespace AtTiny13=AtTinyX5;
+      namespace AtTiny25=AtTinyX5;
+      namespace AtTiny45=AtTinyX5;
+      namespace AtTiny85=AtTinyX5;
+      namespace AtTiny44=AtTinyX4;
+      namespace AtTiny84=AtTinyX4;
+      namespace AtTiny48=AtTinyX8;
+      namespace AtTiny88=AtTinyX8;
+
+  }//avr namespace
 
   }//namespace OneLib
 #endif

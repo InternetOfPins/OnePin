@@ -20,7 +20,7 @@ Software wire, transfer state between two pins.
 ## details
 Soft device files should not contain a namespace as they will be included on a framework namespace providing specific instantiations and access to framework specific utils.
 
-If mixing base frameworks then a specification of namespace must be provided
+If mixing base frameworks then a specification of namespace must be provided to disambiguate
 
 ```c++
 OneLib::Arduino::Debouncer<...>;

@@ -19,15 +19,15 @@
 
       //bit-fields base is one byte on avrs (8 bit mcus)
       template<size_t data,OneBit::Byte at=0, OneBit::Byte sz=1>
-      using BitField=OneBit::BitField<uint8_t,data,at,sz>;
+      using Bits=OneBit::Bits<uint8_t,data,at,sz>;
 
       //access avr port registers from a base address
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
-      using In = BitField<base,at,sz>;
+      using In = Bits<base,at,sz>;
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
-      using Mode = BitField<base+1,at,sz>;
+      using Mode = Bits<base+1,at,sz>;
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
-      using Out = BitField<base+2,at,sz>;
+      using Out = Bits<base+2,at,sz>;
 
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
       struct Port:
@@ -82,22 +82,6 @@
       struct OutputPin:public Pin<addr,pin,sz> {
         static inline void begin() {Pin<addr,pin,sz>::modeOut();}
       };
-
-      // template<uint8_t* pinToPort_table,uint8_t* pinToBit_table>
-      // struct ArduinoPins {
-      //   constexpr static inline uint8_t pinToPort(int pin) {
-      //     return pinToPort_table[pin<0?-pin:pin];
-      //   }
-      //   constexpr static inline uint8_t pinToBit(int pin) {
-      //     return pin<0?-pinToBit_table[-pin]:pinToBit_table[pin];
-      //   }
-      //   template<int8_t pin,uint8_t sz=1>
-      //   using Pin =Avr::Pin<pinToPort(pin),pinToBit(pin),sz>;
-      //   template<int8_t pin,uint8_t sz=1>
-      //   using InputPin = Avr::InputPin<pinToPort(pin),pinToBit(pin),sz>;
-      //   template<int8_t pin,uint8_t sz=1>
-      //   using OutputPin =Avr::OutputPin<pinToPort(pin),pinToBit(pin),sz>;
-      // };
 
       //Example of MCU ports/pins zero-cost abstraction
       //all this defs go only on compile time

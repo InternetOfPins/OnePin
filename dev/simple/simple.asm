@@ -6,31 +6,31 @@ Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
-   4:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-   8:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-   c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  10:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  14:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  18:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  1c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  20:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  24:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  28:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  2c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  30:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  34:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  38:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  3c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  40:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  44:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  48:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  4c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  50:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  54:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  58:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  5c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  60:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  64:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+   4:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+   8:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+   c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  10:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  14:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  18:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  1c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  20:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  24:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  28:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  2c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  30:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  34:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  38:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  3c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  40:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  44:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  48:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  4c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  50:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  54:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  58:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  5c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  60:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  64:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
 
 00000068 <__ctors_end>:
   68:	11 24       	eor	r1, r1
@@ -39,29 +39,47 @@ Disassembly of section .text:
   6e:	d8 e0       	ldi	r29, 0x08	; 8
   70:	de bf       	out	0x3e, r29	; 62
   72:	cd bf       	out	0x3d, r28	; 61
-  74:	0e 94 40 00 	call	0x80	; 0x80 <main>
-  78:	0c 94 46 00 	jmp	0x8c	; 0x8c <_exit>
 
-0000007c <__bad_interrupt>:
-  7c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+00000074 <__do_clear_bss>:
+  74:	21 e0       	ldi	r18, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	01 c0       	rjmp	.+2      	; 0x7e <.do_clear_bss_start>
 
-00000080 <main>:
-  80:	83 b1       	in	r24, 0x03	; 3
-  82:	8f 60       	ori	r24, 0x0F	; 15
-  84:	83 b9       	out	0x03, r24	; 3
-  86:	80 e0       	ldi	r24, 0x00	; 0
-  88:	90 e0       	ldi	r25, 0x00	; 0
-  8a:	08 95       	ret
+0000007c <.do_clear_bss_loop>:
+  7c:	1d 92       	st	X+, r1
 
-0000008c <_exit>:
-  8c:	f8 94       	cli
+0000007e <.do_clear_bss_start>:
+  7e:	a4 30       	cpi	r26, 0x04	; 4
+  80:	b2 07       	cpc	r27, r18
+  82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
+  84:	0e 94 48 00 	call	0x90	; 0x90 <main>
+  88:	0c 94 4e 00 	jmp	0x9c	; 0x9c <_exit>
 
-0000008e <__stop_program>:
-  8e:	ff cf       	rjmp	.-2      	; 0x8e <__stop_program>
+0000008c <__bad_interrupt>:
+  8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000090 <main>:
+  90:	80 91 00 01 	lds	r24, 0x0100
+  94:	80 68       	ori	r24, 0x80	; 128
+  96:	80 93 00 01 	sts	0x0100, r24
+  9a:	ff cf       	rjmp	.-2      	; 0x9a <main+0xa>
+
+0000009c <_exit>:
+  9c:	f8 94       	cli
+
+0000009e <__stop_program>:
+  9e:	ff cf       	rjmp	.-2      	; 0x9e <__stop_program>
+
+Disassembly of section .bss:
+
+00800100 <__bss_start>:
+  800100:	00 00       	nop
+	...
 
 Disassembly of section .comment:
 
-00000000 <.comment>:
+00000000 <_end-0x800104>:
    0:	47 43       	sbci	r20, 0x37	; 55
    2:	43 3a       	cpi	r20, 0xA3	; 163
    4:	20 28       	or	r2, r0
@@ -165,7 +183,7 @@ Disassembly of section .debug_info:
   6c:	14 00       	.word	0x0014	; ????
   6e:	00 00       	nop
   70:	01 05       	cpc	r16, r1
-  72:	03 c1       	rjmp	.+518    	; 0x27a <__data_load_end+0x1ea>
+  72:	03 c1       	rjmp	.+518    	; 0x27a <__data_load_end+0x1da>
   74:	00 80       	ld	r0, Z
   76:	00 0a       	sbc	r0, r16
   78:	3c 00       	.word	0x003c	; ????
@@ -174,7 +192,7 @@ Disassembly of section .debug_info:
   7e:	14 00       	.word	0x0014	; ????
   80:	00 00       	nop
   82:	01 05       	cpc	r16, r1
-  84:	03 c2       	rjmp	.+1030   	; 0x48c <__data_load_end+0x3fc>
+  84:	03 c2       	rjmp	.+1030   	; 0x48c <__data_load_end+0x3ec>
   86:	00 80       	ld	r0, Z
   88:	00 0b       	sbc	r16, r16
   8a:	43 00       	.word	0x0043	; ????
@@ -183,7 +201,7 @@ Disassembly of section .debug_info:
   90:	1b 00       	.word	0x001b	; ????
   92:	00 00       	nop
   94:	01 05       	cpc	r16, r1
-  96:	03 c4       	rjmp	.+2054   	; 0x89e <__data_load_end+0x80e>
+  96:	03 c4       	rjmp	.+2054   	; 0x89e <__data_load_end+0x7fe>
   98:	00 80       	ld	r0, Z
   9a:	00 0c       	add	r0, r0
   9c:	49 00       	.word	0x0049	; ????

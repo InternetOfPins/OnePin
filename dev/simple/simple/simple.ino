@@ -9,10 +9,10 @@
 // using namespace OneLib::Avr::AtMega328;
 // typedef Avr::OutputPin<portB,5,1> Led;
 
-uint8_t tmp=0;
-typedef OneBit::BitField<uint8_t,(uint8_t*)0x23,0,4> Led;
+uint8_t tmp[4]={0,0,0,0};
+typedef OneBit::Bits<uint8_t,tmp,7,2,uint8_t> Led;
 
 int main() {
-  Led::on();
-  return 0;
+  Led::set(1);
+  return Led::get();
 }

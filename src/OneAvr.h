@@ -3,6 +3,7 @@
   #define ONELIB_AVR_DEF
 
 // #include "OneLib.h"
+#include "OneBit.h"
 
   namespace OneLib {
     namespace Avr {
@@ -10,24 +11,19 @@
       // #include "HAL/Mem.h"
       // #include "HAL/Func.h"
       #include "HAL/Pin.h"
-      #include "OneBit.h"
 
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
       // #include "Soft/Wire.h"
 
       // #include "OnePin.h"
 
-      //bit-fields base is one byte on avrs (8 bit mcus)
-      template<size_t data,OneBit::Byte at=0, OneBit::Byte sz=1>
-      using Bits=OneBit::Bits<uint8_t,reinterpret_cast<uint8_t*>(data),at,sz>;
-
       //access avr port registers from a base address
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
-      using In = Bits<base,at,sz>;
+      using In = OneBit::Bits<uint8_t,size_t,base,at,sz>;
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
-      using Mode = Bits<base+1,at,sz>;
+      using Mode = OneBit::Bits<uint8_t,size_t,base+1,at,sz>;
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
-      using Out = Bits<base+2,at,sz>;
+      using Out = OneBit::Bits<uint8_t,size_t,base+2,at,sz>;
 
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
       struct Port:

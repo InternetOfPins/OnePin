@@ -13,15 +13,10 @@
 
       #include <OneBit.h>
 
-      // #include "HAL/Mem.h"
-      // #include "HAL/Func.h"
       #include "HAL/Pin.h"
 
       #include "Soft/Debounce.h"
       #include "Soft/Wire.h"
-
-      template<size_t data,OneBit::Byte at=0, OneBit::Byte sz=1>
-      using Bits=OneBit::Bits<uint8_t,data,at,sz>;
 
       template<const int pin>
       struct PinBase {

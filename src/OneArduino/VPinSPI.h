@@ -25,15 +25,15 @@ ruihfazevedo@gmail.com
             spi.begin();
           }
           template<uint8_t bit,uint8_t nbits=1>
-          static inline bool in() {return BitPart<bit,nbits>::get(data);}
+          static inline bool in() {return OneBit::Bits<uint8_t,data,bit,nbits>::get();}
           template<uint8_t bit,uint8_t nbits=1>
-          static inline uint8_t get() {return BitPart<bit,nbits>::get(data);}
+          static inline uint8_t get() {return OneBit::Bits<uint8_t,data,bit,nbits>::get();}
           template<uint8_t bit,uint8_t nbits=1>
-          static inline void on() {BitPart<bit,nbits>::on(data);}
+          static inline void on() {OneBit::Bits<uint8_t,data,bit,nbits>::on();}
           template<uint8_t bit,uint8_t nbits=1>
-          static inline void off() {BitPart<bit,nbits>::off(data);}
+          static inline void off() {OneBit::Bits<uint8_t,data,bit,nbits>::off();}
           template<uint8_t bit,uint8_t nbits=1>
-          static inline void set(uint8_t value) {BitPart<bit,nbits>::set(data,value);}
+          static inline void set(uint8_t value) {OneBit::Bits<uint8_t,data,bit,nbits>::set(value);}
         protected:
           static uint8_t data[sz];
           static void io() {

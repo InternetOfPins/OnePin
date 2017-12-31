@@ -2,9 +2,9 @@
 
 using namespace OneLib;
 using namespace OneLib::Avr;
-using namespace OneLib::Avr::AtMega328p;
+using namespace OneLib::Avr::AtMega328;
 
-typedef PinCap<OutputPin<PortB,5>> Led;
+typedef OutputPin<portB,5> Led;
 
 void setup() {
   Led::begin();

@@ -7,19 +7,19 @@
   namespace OneLib {
     namespace Avr {
 
-      #include "HAL/Mem.h"
-      #include "HAL/Func.h"
+      // #include "HAL/Mem.h"
+      // #include "HAL/Func.h"
       #include "HAL/Pin.h"
       #include "OneBit.h"
 
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
-      #include "Soft/Wire.h"
+      // #include "Soft/Wire.h"
 
       // #include "OnePin.h"
 
       //bit-fields base is one byte on avrs (8 bit mcus)
       template<size_t data,OneBit::Byte at=0, OneBit::Byte sz=1>
-      using Bits=OneBit::Bits<uint8_t,data,at,sz>;
+      using Bits=OneBit::Bits<uint8_t,reinterpret_cast<uint8_t*>(data),at,sz>;
 
       //access avr port registers from a base address
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
@@ -53,8 +53,11 @@
           Mode<base,at,sz>::off();
           Out<base,at,sz>::off();
         }
+        static inline uint8_t get() {return In<base,at,sz>::get();}
+        static inline void set(uint8_t value) {Out<base,at,sz>::set(value);}
         static inline void on() {Out<base,at,sz>::on();}
         static inline void off() {Out<base,at,sz>::off();}
+        static inline void tog() {Out<base,at,sz>::set(~In<base,at,sz>::get());}
 
         static inline void begin() {}
         static inline uint8_t rawIn() {return in();}
@@ -70,7 +73,7 @@
       using Pin=LastState<LogicPinBase<PinBase<addr,pin<0?-pin:pin,sz>,(pin<0)>>;
 
       //TODO: move begin to HAL/Pin.h avoiding the if!
-      template<size_t addr,int pin,uint8_t sz>
+      template<size_t addr,int pin,uint8_t sz=1>
       struct InputPin:public Pin<addr,pin,sz> {
         static inline void begin() {
           if (pin<0) Pin<addr,pin,sz>::modeInUp();
@@ -78,7 +81,7 @@
         }
       };
 
-      template<size_t addr,int pin,uint8_t sz>
+      template<size_t addr,int pin,uint8_t sz=1>
       struct OutputPin:public Pin<addr,pin,sz> {
         static inline void begin() {Pin<addr,pin,sz>::modeOut();}
       };
@@ -86,7 +89,13 @@
       //Example of MCU ports/pins zero-cost abstraction
       //all this defs go only on compile time
       namespace AtMega328 {
-        enum Ports:uint8_t {portB=0x23,portC=0x26,portD=0x29};
+        enum Ports:size_t {
+          portB=0x23,
+          portC=0x26,
+          portD=0x29
+        };
+        template<uint8_t at,int8_t sz=1>
+        using PortB=Port<portB,at,sz>;
         namespace ArduinoPins {
           constexpr static uint8_t pinToPort_table[]={
             portD,portD,portD,portD,portD,portD,portD,portD,

@@ -1,0 +1,25 @@
+language: python
+python:
+   - "2.7"
+
+sudo: false
+cache:
+   directories:
+       - "~/.platformio"
+
+env:
+   - PLATFORMIO_CI_SRC=examples/AvrBlink/AvrBlink/AvrBlink.ino
+   - PLATFORMIO_CI_SRC=examples/Blink/Blink/Blink.ino
+   - PLATFORMIO_CI_SRC=examples/BtnbBlink/BtnbBlink/BtnbBlink.ino
+   - PLATFORMIO_CI_SRC=examples/multiblink/multiblink/multiblink.ino
+   - PLATFORMIO_CI_SRC=examples/SPIPin/SPIPin/SPIPin.ino
+   - PLATFORMIO_CI_SRC=examples/SPIPort/SPIPort/SPIPort.ino
+
+install:
+   - pip install -U platformio
+   - wget https://github.com/InternetOfPins/OneBit/archive/master.zip -O /tmp/OneBit-master.zip
+   - unzip /tmp/OneBit-master.zip -d /tmp/
+
+script:
+  #  - platformio ci --lib="."  --board=nanoatmega328 --board=teensy31
+   - platformio ci --lib="." --lib="/tmp/OneBit-master" --board=nanoatmega328

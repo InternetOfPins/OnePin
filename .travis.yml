@@ -21,5 +21,4 @@ install:
    - unzip /tmp/OneBit-master.zip -d /tmp/
 
 script:
-  #  - platformio ci --lib="."  --board=nanoatmega328 --board=teensy31
-   - platformio ci --lib="." --lib="/tmp/OneBit-master" --board=nanoatmega328
+   - platformio ci --lib="." --lib="/tmp/OneBit-master" --board=nanoatmega328 --board=teensy31

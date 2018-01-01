@@ -33,6 +33,7 @@
         template<bool T>
         static inline void set() {T?on():off();}
         static inline void set(bool v) {v?on():off();}
+        static inline void tog() {in()?off():on();}
       };
       template<int pin>
       using Pin=LastState<LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>>;

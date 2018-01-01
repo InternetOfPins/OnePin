@@ -15,9 +15,9 @@ on the sequence of VirtualPins proposals done to Arduino framework
 #ifndef ONE_PIN_DEF_H
   #define ONE_PIN_DEF_H
 
-  // #include "HAL/Pin.h"
 
   namespace OneLib {
+    #include "HAL/Pin.h"
     class OnePin {
       public:
         inline operator bool() {return in();}

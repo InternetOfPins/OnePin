@@ -9,11 +9,11 @@ cache:
 
 env:
    - PLATFORMIO_CI_SRC=examples/AvrBlink/AvrBlink/AvrBlink.ino
-   - PLATFORMIO_CI_SRC=examples/Blink/Blink/Blink.ino
+   # - PLATFORMIO_CI_SRC=examples/Blink/Blink/Blink.ino
    - PLATFORMIO_CI_SRC=examples/BtnbBlink/BtnbBlink/BtnbBlink.ino
-   - PLATFORMIO_CI_SRC=examples/multiblink/multiblink/multiblink.ino
+   # - PLATFORMIO_CI_SRC=examples/multiblink/multiblink/multiblink.ino
    - PLATFORMIO_CI_SRC=examples/SPIPin/SPIPin/SPIPin.ino
-   - PLATFORMIO_CI_SRC=examples/SPIPort/SPIPort/SPIPort.ino
+   # - PLATFORMIO_CI_SRC=examples/SPIPort/SPIPort/SPIPort.ino
 
 install:
    - pip install -U platformio

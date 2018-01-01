@@ -250,10 +250,15 @@ typedef PinCap<OutputPin<9>> LatchPin;
 //describe SPI shift registers geometry
 typedef SPIExt<SPI, LatchPin,1> SPI_8;//a set of 8 output pins
 
-//allocate output pins from SPI shift registers SPI_8, bit 0
-typedef PinCap<SPIPin<SPI_8,0>> SPILed;
+//allocate output pins from SPI shift registers SPI_8,
+// starting at bit 0 and with size of 8 bits
+//for the nature of the SPI register used this are output only
+//however the SPI protocol allows IO
+typedef PinCap<SPIPin<SPI_8,0,8>> SPILed;
 
 void setup() {
+  //just make sure that SPI activity does not jam programming
+  delay(500);
   //will init SPI and latch pin
   SPI_8::begin();
 }
@@ -264,7 +269,6 @@ void loop() {
   SPILed::off();
   delay(900);
 }
-
 ```
 
 ## Generated code

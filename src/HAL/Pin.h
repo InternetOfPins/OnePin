@@ -18,7 +18,7 @@ struct VoidPin {
   static inline void modeInUp() {}
   static inline void on() {}
   static inline void off() {}
-  static inline uint8_t in() {return false;}
+  static inline unsigned char in() {return false;}
   static inline bool rawIn() {return in();}
   static inline bool logicIn() {return in();}
   // static inline void setLast(bool) {}
@@ -30,7 +30,7 @@ template<class O,bool isOn>
 class LogicPinBase:public O {
   public:
     NAMED("LogicPinBase")
-    static inline uint8_t in() {return O::in()^isOn;}
+    static inline unsigned char in() {return O::in()^isOn;}
     static inline bool logicIn() {return in();}
     static inline void on() {isOn?O::off():O::on();}
     static inline void off() {isOn?O::on():O::off();}
@@ -43,11 +43,11 @@ class LastState:public O {
   protected:
     static inline bool getLast() {return lastState;}
     static inline bool setLast(bool v) {return lastState=v;}
-    static uint8_t lastState;
+    static unsigned char lastState;
 };
 
 template<class O>
-uint8_t LastState<O>::lastState;
+unsigned char LastState<O>::lastState;
 
 //pin state record, update last pin state after reading input
 template<class O>
@@ -55,10 +55,10 @@ class RecState:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("RecState")
     //TODO: also record output changes!
-    static inline uint8_t in() {return O::setLast(O::in());}
+    static inline unsigned char in() {return O::setLast(O::in());}
     static inline void on() {O::on();O::setLast(true);}
     static inline void off() {O::off();O::setLast(false);}
-    static inline void set(uint8_t v) {O::set(v);O::setLast(v);}
+    static inline void set(unsigned char v) {O::set(v);O::setLast(v);}
 };
 
 //avoid self stack
@@ -73,12 +73,12 @@ class OnChangeAction:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("OnChangeAction")
     OnChangeAction() {}
-    static inline uint8_t in() {
+    static inline unsigned char in() {
       bool n=O::in();
       if (n!=O::getLast()) f();
       return n;
     }
-    static inline void set(uint8_t v) {
+    static inline void set(unsigned char v) {
       O::set(v);
       if (v!=O::getLast()) f();
     }
@@ -98,12 +98,12 @@ template<class O,void(*f)()>
 class OnRiseAction:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("OnRiseAction")
-    static inline uint8_t in() {
+    static inline unsigned char in() {
       bool n=O::in();
       if (n&&n!=O::getLast()) f();
       return n;
     }
-    // static inline void set(uint8_t v) {
+    // static inline void set(unsigned char v) {
     //   O::set(v);
     //   if (v&&v!=O::getLast()) f();
     // }
@@ -123,12 +123,12 @@ template<class O,void(*f)()>
 class OnFallAction:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("OnFallAction")
-    static inline uint8_t in() {
+    static inline unsigned char in() {
       bool n=O::in();
       if (!(n||n==O::getLast())) f();
       return n;
     }
-    static inline void set(uint8_t v) {
+    static inline void set(unsigned char v) {
       O::set(v);
       if (!(v||(v==O::getLast()))) f();
     }
@@ -151,7 +151,7 @@ struct PinCap:public O {
   static inline void begin() {O::begin();}
   static inline void tog() {set(!O::in());}
   static inline void pulse() {tog();tog();}
-  static inline void set(uint8_t v) {O::set(v);}
+  static inline void set(unsigned char v) {O::set(v);}
 };
 
 //remove LastState functionality (no-one else used it)

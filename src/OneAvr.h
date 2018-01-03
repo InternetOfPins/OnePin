@@ -3,17 +3,23 @@
   #define ONELIB_AVR_DEF
 
 // #include "OneLib.h"
-#include "OneBit.h"
 
   namespace OneLib {
     namespace Avr {
 
+      struct API {
+        inline unsigned long getMillis() {static_assert(false,"AVR has no time elapse source by default, use a specific framework.");}//AVR has not this one!
+        static inline void delay_ms(double ms) {_delay_ms(ms);}
+        static inline void delay_us(double us) {_delay_ms(us);}
+      };
+
+      #include <OneBit.h>
       // #include "HAL/Mem.h"
       // #include "HAL/Func.h"
       #include "HAL/Pin.h"
 
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
-      // #include "Soft/Wire.h"
+      #include "Soft/Wire.h"
 
       // #include "OnePin.h"
 

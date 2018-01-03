@@ -7,9 +7,11 @@
   namespace OneLib {
     namespace Arduino {
 
-      #define CHRONOMETER
-
-      inline unsigned long getMillis() {return millis();}
+      struct API {
+        static inline unsigned long getMillis() {return millis();}
+        static inline void delay_ms(unsigned long ms) {delay(ms);}
+        static inline void delay_us(unsigned int us) {delayMicroseconds(us);}
+      };
 
       #include <OneBit.h>
 

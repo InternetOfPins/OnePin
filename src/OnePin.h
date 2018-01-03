@@ -37,6 +37,7 @@ on the sequence of VirtualPins proposals done to Arduino framework
         virtual void on()=0;
         virtual void off()=0;
         virtual bool in()=0;
+        virtual bool set(bool v)=0;
         virtual bool rawIn()=0;
         virtual bool logicIn()=0;
         // template<bool T>
@@ -51,15 +52,16 @@ on the sequence of VirtualPins proposals done to Arduino framework
     class OnePinHook:public OnePin  {
       public:
         OnePinHook(O& o):pin(o) {}
-        void begin() override {pin.begin();}
-        void modeOut() override {pin.modeOut();}
-        void modeIn() override {pin.modeIn();}
-        void modeInUp() override {pin.modeInUp();}
-        void on() override {pin.on();}
-        void off() override {pin.off();}
-        bool in() override {return pin.in();}
-        bool rawIn() override {return pin.rawIn();}
-        bool logicIn() override {return pin.logicIn();}
+        inline void begin() override {pin.begin();}
+        inline void modeOut() override {pin.modeOut();}
+        inline void modeIn() override {pin.modeIn();}
+        inline void modeInUp() override {pin.modeInUp();}
+        inline void on() override {pin.on();}
+        inline void off() override {pin.off();}
+        inline bool in() override {return pin.in();}
+        inline bool set() override {return pin.in();}
+        inline bool rawIn() override {return pin.rawIn();}
+        inline bool logicIn() override {return pin.logicIn();}
       protected:
         O& pin;
     };

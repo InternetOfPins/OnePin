@@ -44,7 +44,7 @@ this is ongoin and still does not compile, some help is welcome
       template<int pin>
       struct InputPin:public Pin<pin> {
         inline void begin() {
-          if (pin<0) pin_init(this,pin,input_pull_up);//TODO: not been able to do this with simba framework
+          if (pin<0) pin_init(this,pin,PIN_INPUT_PULL_UP);//TODO: not been able to do this with simba framework
           else pin_init(this,pin,PIN_INPUT);
         }
       };

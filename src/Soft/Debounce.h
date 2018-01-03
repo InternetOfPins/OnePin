@@ -24,8 +24,8 @@
   class DebounceOnOff:public O/*,protected virtual LastState*/ {
     public:
       static inline bool in() {
-        if (getMillis()-lastSet<delta) return O::getLast();
-        lastSet=getMillis();
+        if (API::getMillis()-lastSet<delta) return O::getLast();
+        lastSet=API::getMillis();
         return O::in();
       }
       // inline operator bool() {return in();}

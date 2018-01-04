@@ -29,14 +29,14 @@ this is ongoin and still does not compile, some help is welcome
         inline void modeOut() {mode(PIN_OUTPUT);}
         inline void modeIn() {mode(PIN_INPUT);}
         // inline void modeInUp() {mode(PIN_INPUT_PULLUP);}
-        inline bool in() {return pin_read(this);}
-        inline bool rawIn() {return in();}
-        inline bool logicIn() {return in();}
+        inline Value in() {return pin_read(this);}
+        inline Value rawIn() {return in();}
+        inline Value logicIn() {return in();}
         inline void on() {pin_write(this  ,1);}
         inline void off() {pin_write(this,0);}
-        template<bool T>
+        template<Value T>
         inline void set() {T?on():off();}
-        inline void set(bool v) {v?on():off();}
+        inline void set(Value v) {v?on():off();}
       };
       template<int pin>
       using Pin=LastState<LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>>;

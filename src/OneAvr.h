@@ -8,20 +8,17 @@
     namespace Avr {
 
       struct API {
-        inline unsigned long getMillis() {static_assert(false,"AVR has no time elapse source by default, use a specific framework.");}//AVR has not this one!
+        // inline unsigned long getMillis() {static_assert(false,"AVR has no time elapse source by default, use a specific framework.");}//AVR has not this one!
         static inline void delay_ms(double ms) {_delay_ms(ms);}
         static inline void delay_us(double us) {_delay_ms(us);}
       };
 
+      using Value=uint8_t;
       #include <OneBit.h>
-      // #include "HAL/Mem.h"
-      // #include "HAL/Func.h"
       #include "HAL/Pin.h"
 
       // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
       #include "Soft/Wire.h"
-
-      // #include "OnePin.h"
 
       //access avr port registers from a base address
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>

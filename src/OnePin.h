@@ -14,13 +14,11 @@ on the sequence of VirtualPins proposals done to Arduino framework
 */
 #ifndef ONE_PIN_DEF_H
   #define ONE_PIN_DEF_H
-
-
   namespace OneLib {
-    #include "HAL/Pin.h"
+    // #include "HAL/Pin.h"
     class OnePin {
       public:
-        inline operator bool() {return in();}
+        inline operator Value() {return in();}
         template<unsigned char M> void mode();
         inline void mode(const PinMode m) {
           switch(m) {
@@ -36,13 +34,13 @@ on the sequence of VirtualPins proposals done to Arduino framework
         virtual void modeInUp()=0;
         virtual void on()=0;
         virtual void off()=0;
-        virtual bool in()=0;
-        virtual bool set(bool v)=0;
-        virtual bool rawIn()=0;
-        virtual bool logicIn()=0;
-        // template<bool T>
+        virtual void set(Value v)=0;
+        virtual Value in()=0;
+        virtual Value rawIn()=0;
+        virtual Value logicIn()=0;
+        // template<Value T>
         // inline void set() {T?on():off();}//compiletime
-        // inline void set(bool v) {v?on():off();}//runtime
+        // inline void set(Value v) {v?on():off();}//runtime
     };
     template<>inline void OnePin::mode<ModeOut>() {modeOut();}
     template<>inline void OnePin::mode<ModeIn>() {modeIn();}
@@ -58,10 +56,10 @@ on the sequence of VirtualPins proposals done to Arduino framework
         inline void modeInUp() override {pin.modeInUp();}
         inline void on() override {pin.on();}
         inline void off() override {pin.off();}
-        inline bool in() override {return pin.in();}
-        inline bool set() override {return pin.in();}
-        inline bool rawIn() override {return pin.rawIn();}
-        inline bool logicIn() override {return pin.logicIn();}
+        inline Value in() override {return pin.in();}
+        inline void set(Value v) override {pin.set(v);}
+        inline Value rawIn() override {return pin.rawIn();}
+        inline Value logicIn() override {return pin.logicIn();}
       protected:
         O& pin;
     };

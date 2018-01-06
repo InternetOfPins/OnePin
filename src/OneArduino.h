@@ -8,12 +8,13 @@
     namespace Arduino {
 
       struct API {
+        using Value=uint8_t;
         static inline unsigned long getMillis() {return millis();}
         static inline void delay_ms(unsigned long ms) {delay(ms);}
         static inline void delay_us(unsigned int us) {delayMicroseconds(us);}
       };
 
-      using Value=uint8_t;
+      using Value=API::Value;
 
       // #include <OneBit.h>
       #include "HAL/Pin.h"

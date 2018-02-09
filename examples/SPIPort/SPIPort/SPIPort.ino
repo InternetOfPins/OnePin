@@ -26,5 +26,5 @@ void setup() {
 }
 
 void loop() {
-  SPIChip0::set(tog<10,90>()?0xFF:0x00);
+  SPIChip0::set(tog<100,900>()?0xFF:0x00);
 }

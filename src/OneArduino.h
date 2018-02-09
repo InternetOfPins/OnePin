@@ -7,14 +7,15 @@
   namespace OneLib {
     namespace Arduino {
 
-      struct API {
+      struct ArduinoAPI {
         using Value=uint8_t;
         static inline unsigned long getMillis() {return millis();}
         static inline void delay_ms(unsigned long ms) {delay(ms);}
         static inline void delay_us(unsigned int us) {delayMicroseconds(us);}
       };
 
-      using Value=API::Value;
+      //TODO: use explicit instead
+      // using Value=API::Value;
 
       // #include <OneBit.h>
       #include "HAL/Pin.h"
@@ -22,7 +23,7 @@
       #include "Soft/Wire.h"
 
       template<const int pin>
-      struct PinBase {
+      struct PinBase:public ArduinoAPI {
         static inline void begin() {}
         static inline void mode(const uint8_t m) {pinMode(pin,m);}
         static inline void modeOut() {pinMode(pin,OUTPUT);}
@@ -39,7 +40,7 @@
         static inline void tog() {in()?off():on();}
       };
       template<int pin>
-      using Pin=LastState<LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>>;
+      using Pin=LastState<LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>,uint8_t>;
 
       template<const int pin>
       struct InputPin:public Pin<pin> {

@@ -13,6 +13,7 @@ ruihfazevedo@gmail.com
   // #include "OneLib.h"
   #include <Arduino.h>
   #include <SPI.h>
+  #include <OneBit.h>
 
   namespace OneLib {
     namespace Arduino {

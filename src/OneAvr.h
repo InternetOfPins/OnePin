@@ -8,12 +8,14 @@
     namespace Avr {
 
       struct API {
+        using Value=uint8_t;
         // inline unsigned long getMillis() {static_assert(false,"AVR has no time elapse source by default, use a specific framework.");}//AVR has not this one!
         static inline void delay_ms(double ms) {_delay_ms(ms);}
         static inline void delay_us(double us) {_delay_ms(us);}
       };
 
-      using Value=uint8_t;
+      //TODO: use explicit instead!
+      // using Value=uint8_t;
       #include <OneBit.h>
       #include "HAL/Pin.h"
 
@@ -30,6 +32,7 @@
 
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
       struct Port:
+        public API,
         protected In<base,at,sz>,
         protected Mode<base,at,sz>,
         protected Out<base,at,sz>
@@ -69,7 +72,7 @@
       };
 
       template<size_t addr,int pin,uint8_t sz=1>
-      using Pin=LastState<LogicPinBase<PinBase<addr,pin<0?-pin:pin,sz>,(pin<0)>>;
+      using Pin=LastState<LogicPinBase<PinBase<addr,pin<0?-pin:pin,sz>,(pin<0)>,uint8_t>;
 
       //TODO: move begin to HAL/Pin.h avoiding the if!
       template<size_t addr,int pin,uint8_t sz=1>

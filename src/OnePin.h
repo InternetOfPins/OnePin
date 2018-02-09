@@ -12,6 +12,8 @@ OnePin is this break layer, breaking appart the type level abstracion from  a ge
 This is the base for IOP - The Internet Of Pins
 on the sequence of VirtualPins proposals done to Arduino framework
 */
+#include "HAL/Pin.h"
+
 #ifndef ONE_PIN_DEF_H
   #define ONE_PIN_DEF_H
   namespace OneLib {

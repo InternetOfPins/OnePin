@@ -1,6 +1,7 @@
 /* -*- C++ -*- */
 /*
-to be included in some place that defines type `Value`
+**NOT** to be included in some place that defines type `typename O::Value`
+i'm trying to get this explicit
 */
 
 enum PinMode {ModeOpen,ModeOut,ModeIn,ModeInUp};
@@ -12,6 +13,7 @@ enum PinMode {ModeOpen,ModeOut,ModeIn,ModeInUp};
 #endif
 
 //void pin, use this if no pin is to be used ------------------------------
+template<typename Value>
 struct VoidPin {
   NAMED("VoidPin")
   inline operator Value() {return in();}
@@ -24,23 +26,23 @@ struct VoidPin {
   static inline Value in() {return false;}
   static inline Value rawIn() {return in();}
   static inline Value logicIn() {return in();}
-  // static inline void setLast(Value) {}
-} voidPin;//or its objective version
+  // static inline void setLast(typename O::Value) {}
+};
 
 //-----------------------------------------------------------------------
 //if needed invert pin logic or be absent : constexpr^0
-template<class O,Value isOn>
+template<class O,typename O::Value isOn>
 class LogicPinBase:public O {
   public:
     NAMED("LogicPinBase")
-    static inline Value in() {return O::in()^isOn;}
-    static inline Value logicIn() {return in();}
+    static inline typename O::Value in() {return O::in()^isOn;}
+    static inline typename O::Value logicIn() {return in();}
     static inline void on() {isOn?O::off():O::on();}
     static inline void off() {isOn?O::on():O::off();}
 };
 
 //store last pin state
-template<class O>
+template<class O,typename Value>
 class LastState:public O {
   public: NAMED("LastState")
   protected:
@@ -49,8 +51,8 @@ class LastState:public O {
     static Value lastState;
 };
 
-template<class O>
-Value LastState<O>::lastState;
+template<class O,typename Value>
+Value LastState<O,Value>::lastState;
 
 //pin state record, update last pin state after reading input
 template<class O>
@@ -58,10 +60,10 @@ class RecState:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("RecState")
     //TODO: also record output changes!
-    static inline Value in() {return O::setLast(O::in());}
+    static inline typename O::Value in() {return O::setLast(O::in());}
     static inline void on() {O::on();O::setLast(true);}
     static inline void off() {O::off();O::setLast(false);}
-    static inline void set(Value v) {O::set(v);O::setLast(v);}
+    static inline void set(typename O::Value v) {O::set(v);O::setLast(v);}
 };
 
 //avoid self stack
@@ -76,12 +78,12 @@ class OnChangeAction:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("OnChangeAction")
     OnChangeAction() {}
-    static inline Value in() {
-      Value n=O::in();
+    static inline typename O::Value in() {
+      typename O::Value n=O::in();
       if (n!=O::getLast()) f();
       return n;
     }
-    static inline void set(Value v) {
+    static inline void set(typename O::Value v) {
       O::set(v);
       if (v!=O::getLast()) f();
     }
@@ -101,12 +103,12 @@ template<class O,void(*f)()>
 class OnRiseAction:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("OnRiseAction")
-    static inline Value in() {
-      Value n=O::in();
+    static inline typename O::Value in() {
+      typename O::Value n=O::in();
       if (n&&n!=O::getLast()) f();
       return n;
     }
-    // static inline void set(Value v) {
+    // static inline void set(typename O::Value v) {
     //   O::set(v);
     //   if (v&&v!=O::getLast()) f();
     // }
@@ -126,12 +128,12 @@ template<class O,void(*f)()>
 class OnFallAction:public O/*,protected virtual LastState<O>*/ {
   public:
     NAMED("OnFallAction")
-    static inline Value in() {
-      Value n=O::in();
+    static inline typename O::Value in() {
+      typename O::Value n=O::in();
       if (!(n||n==O::getLast())) f();
       return n;
     }
-    static inline void set(Value v) {
+    static inline void set(typename O::Value v) {
       O::set(v);
       if (!(v||(v==O::getLast()))) f();
     }
@@ -154,12 +156,12 @@ struct PinCap:public O {
   static inline void begin() {O::begin();}
   static inline void tog() {set(!O::in());}
   static inline void pulse() {tog();tog();}
-  static inline void set(Value v) {O::set(v);}
+  static inline void set(typename O::Value v) {O::set(v);}
 };
 
 //remove LastState functionality (no-one else used it)
 template<class O>
-struct PinCap<LastState<O>>:public O {};
+struct PinCap<LastState<O,typename O::Value>>:public O {};
 //dont self overlap functionality (however type overlaps)
 template<class O>
 struct PinCap<PinCap<O>>:public PinCap<O> {};

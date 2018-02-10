@@ -4,9 +4,9 @@
 template<class O,unsigned long delta>
 class DebounceOnOff:public O/*,protected virtual LastState*/ {
   public:
-    static inline typename O::Value in() {
-      if (O::getMillis()-lastSet<delta) return O::getLast();
-      lastSet=O::getMillis();
+    static inline typename O::ValueDef in() {
+      if (O::API::getMillis()-lastSet<delta) return O::getLast();
+      lastSet=O::API::getMillis();
       return O::in();
     }
     // inline operator Value() {return in();}

@@ -21,7 +21,7 @@ typedef SPIExt<SPI, LatchPin,1> SPI_8;//a set of 8 output pins
 // starting at bit 0 and with size of 8 bits
 //for the nature of the SPI register used this are output only
 //however the SPI protocol allows IO
-typedef PinCap<SPIPin<SPI_8,0,8>> SPILed;
+typedef PinCap<SPIPin<SPI_8,0,1>> SPILed;
 
 void setup() {
   //just make sure that SPI activity does not jam programming

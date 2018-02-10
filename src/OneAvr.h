@@ -3,6 +3,10 @@
   #define ONELIB_AVR_DEF
 
 // #include "OneLib.h"
+  #include <OneBit.h>
+  #include "HAL/Pin.h"
+  // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
+  #include "Soft/Wire.h"
 
   namespace OneLib {
     namespace Avr {
@@ -14,14 +18,6 @@
         static inline void delay_us(double us) {_delay_ms(us);}
       };
 
-      //TODO: use explicit instead!
-      // using Value=uint8_t;
-      #include <OneBit.h>
-      #include "HAL/Pin.h"
-
-      // #include "OneLib/Soft/Debounce.h"//avr has no millis functions, so cant have this
-      #include "Soft/Wire.h"
-
       //access avr port registers from a base address
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
       using In = OneBit::Bits<uint8_t,size_t,base,at,sz>;
@@ -32,11 +28,12 @@
 
       template<uint8_t base,uint8_t at=0,uint8_t sz=8>
       struct Port:
-        public API,
         protected In<base,at,sz>,
         protected Mode<base,at,sz>,
         protected Out<base,at,sz>
       {
+        using API=Avr::API;
+        using ValueDef=API::Value;
         static inline uint8_t mode() {return Mode<base,at,sz>::get();}
         static inline void mode(uint8_t m) {Mode<base,at,sz>::set(m);}
         static inline uint8_t in() {return In<base,at,sz>::get();}
@@ -72,7 +69,17 @@
       };
 
       template<size_t addr,int pin,uint8_t sz=1>
-      using Pin=LastState<LogicPinBase<PinBase<addr,pin<0?-pin:pin,sz>,(pin<0)>,uint8_t>;
+      using Pin=
+        LastState<
+          LogicPinBase<
+            PinBase<
+              addr,
+              pin<0?-pin:pin,
+              sz
+            >,
+            (pin<0)
+          >
+        >;
 
       //TODO: move begin to HAL/Pin.h avoiding the if!
       template<size_t addr,int pin,uint8_t sz=1>

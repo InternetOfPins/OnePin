@@ -18,9 +18,11 @@ ruihfazevedo@gmail.com
   namespace OneLib {
     namespace Arduino {
 
-      template<SPIClass& spi,typename LatchPin,int sz=1>
+      template<SPIClass& spi,typename LatchPin,int sz=1,typename Value=API::Value>
       class SPIExt {
         public:
+          using ValueDef=Value;
+          using API=Arduino::API;
           static inline void begin() {
             LatchPin::begin();
             spi.begin();
@@ -44,11 +46,13 @@ ruihfazevedo@gmail.com
           }
       };
 
-      template<SPIClass& spi,typename LatchPin,int sz>
-      uint8_t SPIExt<spi,LatchPin,sz>::data[sz];
+      template<SPIClass& spi,typename LatchPin,int sz,typename Value>
+      uint8_t SPIExt<spi,LatchPin,sz,Value>::data[sz];
 
-      template<class SPIExt,int bit,uint8_t nbits=1>
+      template<class SPIExt,int bit,uint8_t nbits=1,typename Value=API::Value>
       struct SPIPin:protected SPIExt {
+        using ValueDef=Value;
+        using API=Arduino::API;
         static inline void begin() {}
         static inline bool in() {SPIExt::io();return SPIExt::template in<bit,nbits>();}
         static inline uint8_t get() {SPIExt::io();return SPIExt::template get<bit,nbits>();}

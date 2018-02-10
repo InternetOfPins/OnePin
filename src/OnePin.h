@@ -12,16 +12,19 @@ OnePin is this break layer, breaking appart the type level abstracion from  a ge
 This is the base for IOP - The Internet Of Pins
 on the sequence of VirtualPins proposals done to Arduino framework
 */
-#include "HAL/Pin.h"
 
 #ifndef ONE_PIN_DEF_H
   #define ONE_PIN_DEF_H
+  #include <OneBit.h>
+  #include "HAL/Pin.h"
+  using Byte=OneBit::Byte;
   namespace OneLib {
-    // #include "HAL/Pin.h"
+    #include "HAL/Pin.h"
+    template<typename Value,Byte sz=1>
     class OnePin {
       public:
         inline operator Value() {return in();}
-        template<unsigned char M> void mode();
+        // template<unsigned char M> void mode();
         inline void mode(const PinMode m) {
           switch(m) {
             case ModeOut: modeOut();break;
@@ -44,12 +47,12 @@ on the sequence of VirtualPins proposals done to Arduino framework
         // inline void set() {T?on():off();}//compiletime
         // inline void set(Value v) {v?on():off();}//runtime
     };
-    template<>inline void OnePin::mode<ModeOut>() {modeOut();}
-    template<>inline void OnePin::mode<ModeIn>() {modeIn();}
-    template<>inline void OnePin::mode<ModeInUp>() {modeInUp();}
+    // template<>inline void OnePin::mode<ModeOut>() {modeOut();}
+    // template<>inline void OnePin::mode<ModeIn>() {modeIn();}
+    // template<>inline void OnePin::mode<ModeInUp>() {modeInUp();}
 
-    template<class O>
-    class OnePinHook:public OnePin  {
+    template<class O,typename Value,Byte sz=1>
+    class OnePinHook:public OnePin<Value,sz>  {
       public:
         OnePinHook(O& o):pin(o) {}
         inline void begin() override {pin.begin();}
@@ -66,18 +69,18 @@ on the sequence of VirtualPins proposals done to Arduino framework
         O& pin;
     };
 
-    template<typename P>
+    template<typename P,typename Value,Byte sz=1>
     class Hook {
     public:
       static P hwPin;
-      static OnePinHook<P> hook;
+      static OnePinHook<P,Value,sz> hook;
       // inline operator OnePin&() {return hook;}
-      static inline OnePin& pin() {return hook;}
+      static inline OnePin<Value,sz>& pin() {return hook;}
     };
-    template<typename P>
-    P Hook<P>::hwPin;
-    template<typename P>
-    OnePinHook<P> Hook<P>::hook(Hook<P>::hwPin);
+    template<typename P,typename Value,Byte sz>
+    P Hook<P,Value,sz>::hwPin;
+    template<typename P,typename Value,Byte sz>
+    OnePinHook<P,Value,sz> Hook<P,Value,sz>::hook(Hook<P,Value,sz>::hwPin);
 
   };//namespace OneLib
 

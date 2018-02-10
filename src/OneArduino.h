@@ -4,28 +4,26 @@
 
 // #include "OneLib.h"
 
+#include "HAL/Pin.h"
+#include "Soft/Debounce.h"
+#include "Soft/Wire.h"
+
   namespace OneLib {
     namespace Arduino {
 
-      struct ArduinoAPI {
+      struct API {
         using Value=uint8_t;
         static inline unsigned long getMillis() {return millis();}
         static inline void delay_ms(unsigned long ms) {delay(ms);}
         static inline void delay_us(unsigned int us) {delayMicroseconds(us);}
       };
 
-      //TODO: use explicit instead
-      // using Value=API::Value;
-
-      // #include <OneBit.h>
-      #include "HAL/Pin.h"
-      #include "Soft/Debounce.h"
-      #include "Soft/Wire.h"
-
-      template<const int pin>
-      struct PinBase:public ArduinoAPI {
+      template<const int pin,typename Value=API::Value>
+      struct PinBase {
+        using ValueDef=Value;
+        using API=Arduino::API;
         static inline void begin() {}
-        static inline void mode(const uint8_t m) {pinMode(pin,m);}
+        static inline void mode(const Value m) {pinMode(pin,m);}
         static inline void modeOut() {pinMode(pin,OUTPUT);}
         static inline void modeIn() {pinMode(pin,INPUT);}
         static inline void modeInUp() {pinMode(pin,INPUT_PULLUP);}
@@ -39,16 +37,29 @@
         static inline void set(Value v) {v?on():off();}
         static inline void tog() {in()?off():on();}
       };
-      template<int pin>
-      using Pin=LastState<LogicPinBase<PinBase<pin<0?-pin:pin>,pin<0>,uint8_t>;
+      template<int pin,typename Value>
+      using Pin=
+        LastState<
+          LogicPinBase<
+            PinBase<
+              pin<0?-pin:pin,
+              Value
+            >,
+            pin<0
+          >
+        >;
 
-      template<const int pin>
-      struct InputPin:public Pin<pin> {
-        static inline void begin() {if (pin<0) Pin<pin>::modeInUp(); else Pin<pin>::modeIn();}
+      template<int pin,typename Value=API::Value>
+      struct InputPin:public Pin<pin,Value> {
+        using ValueDef=Value;
+        using API=Arduino::API;
+        static inline void begin() {if (pin<0) Pin<pin,Value>::modeInUp(); else Pin<pin,Value>::modeIn();}
       };
-      template<const int pin>
-      struct OutputPin:public Pin<pin> {
-        static inline void begin() {Pin<pin>::modeOut();}
+      template<int pin,typename Value=API::Value>
+      struct OutputPin:public Pin<pin,Value> {
+        using ValueDef=Value;
+        using API=Arduino::API;
+        static inline void begin() {Pin<pin,Value>::modeOut();}
       };
     };
 

@@ -169,24 +169,28 @@
   template<typename O,typename ... OO>
   struct PinGroup {
     NAMED("PinGroup")
-    using Value=typename O::ValueDef;
+    using ValueDef=typename O::ValueDef;
     enum Field {size=O::Field::size+PinGroup<OO...>::Field::size};
-    inline operator Value() {return in();}
+    inline operator ValueDef() {return in();}
     static inline void begin() {O::begin();PinGroup<OO ...>::begin();}
     static inline void modeOut() {O::modeOut();PinGroup<OO ...>::modeOut();}
     static inline void modeIn() {O::modeIn();PinGroup<OO ...>::modeIn();}
     static inline void modeInUp() {O::modeInUp();PinGroup<OO ...>::modeInUp();}
     static inline void on() {O::on();PinGroup<OO ...>::on();}
     static inline void off() {O::off();PinGroup<OO ...>::off();}
-    static inline Value in() {return (O::in()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::in());}
-    static inline Value rawIn() {return (O::rawIn()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::rawIn());}
-    static inline Value logicIn() {return (O::logicIn()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::logicIn());}
+    static inline ValueDef in() {return (O::in()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::in());}
+    static inline ValueDef rawIn() {return (O::rawIn()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::rawIn());}
+    static inline ValueDef logicIn() {return (O::logicIn()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::logicIn());}
+    // template<ValueDef T>
+    // static inline void set() {O::set<T>();PinGroup<OO...>::set<T>();}
+    static inline void set(ValueDef v) {O::set(v>>PinGroup<OO...>::Field::size);PinGroup<OO...>::set(v);}
+    static inline void tog() {O::tog();PinGroup<OO...>::tog();}
   };
 
   template<typename O>
   struct PinGroup<O> {
     NAMED("PinGroup(end)")
-    using Value=typename O::ValueDef;
+    using ValueDef=typename O::ValueDef;
     enum Field {size=O::Field::size};
     static inline void begin() {O::begin();}
     static inline void modeOut() {O::modeOut();}
@@ -194,9 +198,13 @@
     static inline void modeInUp() {O::modeInUp();}
     static inline void on() {O::on();}
     static inline void off() {O::off();}
-    static inline Value in() {return O::in();}
-    static inline Value rawIn() {return O::rawIn();}
-    static inline Value logicIn() {return O::logicIn();}
+    static inline ValueDef in() {return O::in();}
+    static inline ValueDef rawIn() {return O::rawIn();}
+    static inline ValueDef logicIn() {return O::logicIn();}
+    // template<ValueDef T>
+    // static inline void set() {O::set<T>();}
+    static inline void set(ValueDef v) {O::set(v);}
+    static inline void tog() {O::tog();}
   };
 
 #endif

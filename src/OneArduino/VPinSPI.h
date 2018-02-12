@@ -21,6 +21,7 @@ ruihfazevedo@gmail.com
       template<SPIClass& spi,typename LatchPin,int sz=1,typename Value=API::Value>
       class SPIExt {
         public:
+          enum Field {size=sz};
           using ValueDef=Value;
           using API=Arduino::API;
           static inline void begin() {

@@ -20,6 +20,7 @@
 
       template<const int pin,typename Value=API::Value>
       struct PinBase {
+        enum Field {size=1};//arduino pins are arbitrary numerated
         using ValueDef=Value;
         using API=Arduino::API;
         static inline void begin() {}

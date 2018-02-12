@@ -1,6 +1,6 @@
 /* -*- C++ -*- */
-// #ifndef ONEFUNC_DEF
-//   #define ONEFUNC_DEF
+#ifndef ONEFUNC_DEF
+  #define ONEFUNC_DEF
 
   // namespace OneLib {
     //function handler ------------------------------------------------------
@@ -62,4 +62,4 @@
 
   // }
 
-// #endif
+#endif

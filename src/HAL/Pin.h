@@ -1,7 +1,5 @@
 /* -*- C++ -*- */
 /*
-**NOT** to be included in some place that defines type `typename O::ValueDef`
-i'm trying to get this explicit
 */
 #ifndef HAL_PIN_H
 #define HAL_PIN_H
@@ -17,6 +15,7 @@ i'm trying to get this explicit
   template<typename Value>
   struct VoidPin {
     NAMED("VoidPin")
+    enum FieldSize {value=0};
     inline operator Value() {return in();}
     static inline void begin() {}
     static inline void modeOut() {}
@@ -166,4 +165,38 @@ i'm trying to get this explicit
   //dont self overlap functionality (however type overlaps)
   template<class O>
   struct PinCap<PinCap<O>>:public PinCap<O> {};
+
+  template<typename O,typename ... OO>
+  struct PinGroup {
+    NAMED("PinGroup")
+    using Value=typename O::ValueDef;
+    enum Field {size=O::Field::size+PinGroup<OO...>::Field::size};
+    inline operator Value() {return in();}
+    static inline void begin() {O::begin();PinGroup<OO ...>::begin();}
+    static inline void modeOut() {O::modeOut();PinGroup<OO ...>::modeOut();}
+    static inline void modeIn() {O::modeIn();PinGroup<OO ...>::modeIn();}
+    static inline void modeInUp() {O::modeInUp();PinGroup<OO ...>::modeInUp();}
+    static inline void on() {O::on();PinGroup<OO ...>::on();}
+    static inline void off() {O::off();PinGroup<OO ...>::off();}
+    static inline Value in() {return (O::in()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::in());}
+    static inline Value rawIn() {return in();}
+    static inline Value logicIn() {return in();}
+  };
+
+  template<typename O>
+  struct PinGroup<O> {
+    NAMED("PinGroup(end)")
+    using Value=typename O::ValueDef;
+    enum Field {size=O::Field::size};
+    static inline void begin() {O::begin();}
+    static inline void modeOut() {O::modeOut();}
+    static inline void modeIn() {O::modeIn();}
+    static inline void modeInUp() {O::modeInUp();}
+    static inline void on() {O::on();}
+    static inline void off() {O::off();}
+    static inline Value in() {return O::in();}
+    static inline Value rawIn() {return in();}
+    static inline Value logicIn() {return in();}
+  };
+
 #endif

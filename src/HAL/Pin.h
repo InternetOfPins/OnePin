@@ -179,8 +179,8 @@
     static inline void on() {O::on();PinGroup<OO ...>::on();}
     static inline void off() {O::off();PinGroup<OO ...>::off();}
     static inline Value in() {return (O::in()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::in());}
-    static inline Value rawIn() {return in();}
-    static inline Value logicIn() {return in();}
+    static inline Value rawIn() {return (O::rawIn()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::rawIn());}
+    static inline Value logicIn() {return (O::logicIn()<<PinGroup<OO...>::Field::size)|(PinGroup<OO ...>::logicIn());}
   };
 
   template<typename O>
@@ -195,8 +195,8 @@
     static inline void on() {O::on();}
     static inline void off() {O::off();}
     static inline Value in() {return O::in();}
-    static inline Value rawIn() {return in();}
-    static inline Value logicIn() {return in();}
+    static inline Value rawIn() {return O::rawIn();}
+    static inline Value logicIn() {return O::logicIn();}
   };
 
 #endif

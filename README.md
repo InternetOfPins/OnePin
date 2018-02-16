@@ -8,6 +8,9 @@
 This is not a framework and therefor not a candidate to replace any framework.
 Meaning we require an existing one.
 
+## So what is it?
+Its a zero cost overlay to be applied to existing frameworks and provide a common interface for pin manipulation. Well now your code can be portable among frameworks (in what concerns pin manipulation).
+
 ## Purpose
 
 This is the logical complement of the internet of things, for this whole thing called internet came to the `thing`, usually in the form of an MCU. This thing that characterizes this `Things` on the internet its the ability to interact with the world, usually in the form of pins to control parts or read sensors.
@@ -35,7 +38,7 @@ Because current library development requires changing the library code in order 
 - Reverse logic, some libraries make an internal management of pin normal state. We need not.
 - Signal NA pins by using VoidPin, this abstraction removes pin output code.
 
-Enrich the embedded development with some extra connectivity, by providing abstraction of external pins but also allowing devices to publish direct or indirect owned pins, providing a flow path for pin information/signals.
+Enrich the embedded development with some extra connectivity, by providing abstraction of external pins but also allowing devices to publish direct or indirect owned pins, **providing a flow path for pin information/signals**.
 
 ## Goals
 
@@ -45,7 +48,7 @@ Touch this key areas to prove its feasibility.
 2. Abstract common concepts as logic level inversion. ✔
 3. Provide pin composition on client side. Allows pin based libraries to abstract of pin details. ✔
 4. Base for higher abstractions as pin routing and IoP (Internet of Pins) ✔
-5. Interface with externally compiled libraries on a non-type level ✔
+5. Interface with externally compiled libraries on a non-type level ✔ (api still volatile)
 6. Non embedded version of IoP.
 
 ## Technique

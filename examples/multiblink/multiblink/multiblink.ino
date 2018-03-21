@@ -9,7 +9,7 @@ inline bool tog() {return (millis()%(on+off))<on;}
 
 //static hardware description
 typedef PinCap<OutputPin<portB,5>> Led1;//pin 13 on arduino
-typedef PinCap<OutputPin<portC,3>> Led2;//pin A3 on arduino
+typedef PinCap<OutputPin<portB,4>> Led2;//pin A3 on arduino
 
 void setup() {
   Led1::begin();
@@ -18,5 +18,5 @@ void setup() {
 
 void loop() {
   Led1::set(tog<10,90>());
-  Led2::set(tog<500,500>());
+  Led2::set(tog<100,900>());
 }

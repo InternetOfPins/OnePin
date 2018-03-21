@@ -1,20 +1,19 @@
-#ifdef DEBUG
-  #include <streamFlow.h>
-#endif
+#include <OneBit.h>
 
-#include <OneAvr.h>
+namespace OnePin {
+  using namespace OneBit;
+  struct API {
+    static inline void delay_us(int us) {}
+    static inline void delay_ms(int ms) {}
+    static inline unsigned long ms() {}
+  };
 
-using namespace OneLib;
-using namespace OneLib::Avr::AtMega328;
+  template<typename Unit,typename Type,Type data,uint8_t at, uint8_t sz=1,typename Value=Unit>
+  struct PinBase:public Bits<Unit,Type,data,at,sz,Value> {};
 
-typedef PortB<5> Led;
+  struct VoidPin:public PinBase<void,NULL,NULL,0,0> {};
+};
 
-void setup() {
-  Led::begin();
-}
-void loop() {
-  Led::on();
-  delay(10);
-  Led::off();
-  delay(90);
-}
+using namespace OnePin;
+void setup() {}
+void loop() {}

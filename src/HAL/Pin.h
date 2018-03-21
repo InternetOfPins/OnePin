@@ -108,10 +108,10 @@
         if (n&&n!=O::getLast()) f();
         return n;
       }
-      // static inline void set(typename O::ValueDef v) {
-      //   O::set(v);
-      //   if (v&&v!=O::getLast()) f();
-      // }
+      static inline void set(typename O::ValueDef v) {
+        O::set(v);
+        if (v&&v!=O::getLast()) f();
+      }
       static inline void on() {O::on();if (!O::getLast()) f();}
       static inline void off() {O::off();}
   };

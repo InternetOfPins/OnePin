@@ -6,11 +6,7 @@
  */
 
 #pragma once
-#ifdef ARDUINO
-  #include <Arduino.h>
-#else
-  #include <cstdint>
-#endif
+#include <cstdint>
 #include <hapi/hapi.h>
 
 namespace onePin {

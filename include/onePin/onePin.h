@@ -6,12 +6,11 @@
  */
 
 #pragma once
-#include <cstdint>
 #include <hapi/hapi.h>
 
 namespace onePin {
   using namespace hapi;
-  using Unit = uint8_t;
+  using Unit = unsigned char;
 
   // ====================== Pin API terminal ======================
   // Fallback implementation — silently does nothing.

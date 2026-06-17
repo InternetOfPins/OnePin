@@ -1,0 +1,28 @@
+{
+  "name": "OnePin",
+  "version": "0.0.1",
+  "description": "HAPI pin abstraction API — generic pin/port concept, hardware implementations in OneChip",
+  "keywords": "pin, gpio, port, hapi, embedded",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/InternetOfPins/OnePin.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Rui Azevedo",
+      "email": "ruihfazevedo@gmail.com",
+      "url": "https://github.com/neu-rah",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/InternetOfPins/OnePin",
+  "dependencies": {
+    "HAPI":"https://github.com/InternetOfPins/HAPI.git@^0.4.3",
+    "OneBit":"https://github.com/InternetOfPins/OneBit.git"
+  },
+  "frameworks": "*",
+  "platforms": "*"
+}

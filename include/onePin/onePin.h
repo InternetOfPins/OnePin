@@ -266,7 +266,8 @@ namespace onePin {
   // ============================================================
   struct BootDef {
     BootDef() = delete;
-    static void begin() {}
+    static void begin()      {}
+    static void onOverflow() {}
   };
 
   // ============================================================
@@ -294,6 +295,8 @@ namespace onePin {
       (BootItems::begin(), ...);
       (Peripherals::begin(), ...);
     }
+
+    static void onOverflow() { (BootItems::onOverflow(), ...); }
 
     template<typename Fn>
     static void run(Fn fn) { for (;;) fn(); }

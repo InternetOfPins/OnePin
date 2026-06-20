@@ -1,6 +1,6 @@
 {
   "name": "OnePin",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "HAPI pin abstraction API — generic pin/port concept, hardware implementations in OneChip",
   "keywords": "pin, gpio, port, hapi, embedded",
   "repository":

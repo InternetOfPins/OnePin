@@ -77,6 +77,29 @@ namespace onePin {
   };
 
   // ============================================================
+  // Out / In — direction-setter components.
+  // Place above Mask<> in the chain; begin() calls dir_out()/dir_in() automatically.
+  //
+  //   using Led = APIOf<AvrOutPin, Out, Mask<Pins<5>>, chip::PortB>;
+  //   Led::begin();   // dir_out() called — no manual led.dir_out() needed
+  // ============================================================
+  struct Out {
+    template<typename O>
+    struct Part : O {
+      using O::O;
+      static void begin() { O::dir_out(); O::begin(); }
+    };
+  };
+
+  struct In {
+    template<typename O>
+    struct Part : O {
+      using O::O;
+      static void begin() { O::dir_in(); O::begin(); }
+    };
+  };
+
+  // ============================================================
   // detail — HAPI-idiom helpers for DeviceClass
   // ============================================================
   namespace detail {
@@ -263,9 +286,12 @@ namespace onePin {
   template<typename... BootItems, typename... Peripherals>
   struct Device<Boot<BootItems...>, Peripherals...> : DeviceClass<Peripherals...> {
     static void begin() {
-      (BootItems::begin(), ...);    // Boot items first — eraser guaranteed by BootDef terminal
-      (Peripherals::begin(), ...);  // GPIO peripherals — eraser guaranteed by InPin/OutPin/IOPin
+      (BootItems::begin(), ...);
+      (Peripherals::begin(), ...);
     }
+
+    template<typename Fn>
+    static void run(Fn fn) { for (;;) fn(); }
   };
 
   // ============================================================

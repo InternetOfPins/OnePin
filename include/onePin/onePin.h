@@ -247,6 +247,8 @@ namespace onePin {
     };
 
   public:
+    DeviceClass() = delete;
+
     static_assert(((maskCount<Peripherals> == 1) && ...),
       "DeviceClass: each peripheral must have exactly one Mask<> in its chain");
 
@@ -263,6 +265,7 @@ namespace onePin {
   // Provides begin() eraser; hardware boot components override via Part<O>.
   // ============================================================
   struct BootDef {
+    BootDef() = delete;
     static void begin() {}
   };
 
@@ -285,6 +288,8 @@ namespace onePin {
 
   template<typename... BootItems, typename... Peripherals>
   struct Device<Boot<BootItems...>, Peripherals...> : DeviceClass<Peripherals...> {
+    Device() = delete;
+
     static void begin() {
       (BootItems::begin(), ...);
       (Peripherals::begin(), ...);

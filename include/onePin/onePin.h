@@ -313,6 +313,51 @@ namespace onePin {
   };
 
   // ============================================================
+  // VirtualPort<N> — in-memory port for native testing / simulation.
+  //
+  // Matches the hw::avr::AVRPort::Part<O> interface exactly.
+  // Multiple independent ports via the N discriminator (0, 1, 2, …).
+  //
+  // Test code drives inputs and observes outputs through the static registers:
+  //   VirtualPort<0>::_pin  = 0x04;   // simulate pin 2 going high
+  //   assert(VirtualPort<0>::_port & 0x01);  // observe pin 0 output
+  //
+  //   using Led = APIOf<AvrOutPin, Out, Mask<Pins<3>>, VirtualPort<0>>;
+  //   Led::begin(); Led::on();
+  //   assert(VirtualPort<0>::_port & (1<<3));
+  // ============================================================
+  template<int N = 0>
+  struct VirtualPort {
+    using Unit = unsigned char;
+    using Type = unsigned char;
+    static constexpr Unit allowedMask = 0xFF;
+
+    template<Unit NewMask>
+    using rebind = VirtualPort<N>;
+
+    inline static Unit _pin  = 0;
+    inline static Unit _port = 0;
+    inline static Unit _ddr  = 0;
+
+    static void reset() { _pin = 0; _port = 0; _ddr = 0; }
+
+    template<typename O>
+    struct Part : O {
+      using Base = O;
+      using Base::Base;
+
+      static Unit  pin()           { return VirtualPort::_pin;  }
+      static Unit  port()          { return VirtualPort::_port; }
+      static void  port(Unit v)    { VirtualPort::_port = v;    }
+      static Unit  ddr()           { return VirtualPort::_ddr;  }
+      static void  dir_out(Unit m) { VirtualPort::_ddr |=  m;  }
+      static void  dir_in (Unit m) { VirtualPort::_ddr &= ~m;  }
+      static void  dir    (Unit m) { VirtualPort::_ddr  =  m;  }
+      static void  begin()         {}
+    };
+  };
+
+  // ============================================================
   // Convenience aliases
   // ============================================================
   using AvrInPin  = InPin<unsigned char>;

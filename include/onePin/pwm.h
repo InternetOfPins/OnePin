@@ -6,6 +6,7 @@ namespace onePin {
   // Accel<Lo, Hi> — bounded counter with symmetric acceleration.
   // up()/down() accelerate in the respective direction; reversal halves accel.
   // relax() damps acceleration (call when no key is held).
+  /// @brief bounded counter with symmetric acceleration; up()/down() accelerate, reversal halves accel
   template<int Lo = 0, int Hi = 255>
   struct Accel {
     template<typename O>
@@ -48,6 +49,7 @@ namespace onePin {
   //   disable()        — clear COM bits (release pin to GPIO)
   //   on()             — GPIO full-on  (active-low → LOW, active-high → HIGH)
   //   off()            — GPIO full-off (active-low → HIGH, active-high → LOW)
+  /// @brief PWM channel driven by Accel; at boundary values disables PWM and drives GPIO for clean 0%/100%
   template<typename PwmPin, int Lo = 0, int Hi = 255>
   struct PWMChan {
     template<typename O>

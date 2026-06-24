@@ -31,6 +31,7 @@ namespace onePin {
   // Terminals — silent stubs; hardware components override below
   // ============================================================
 
+  /// @brief silent InPin terminal; hardware components (AvrInPin, Esp32InPin…) override via Part<O>
   template<typename U = unsigned char>
   struct InPin {
     using Unit = U;
@@ -44,6 +45,7 @@ namespace onePin {
     static void act()       {}
   };
 
+  /// @brief silent OutPin terminal; hardware components (AvrOutPin, Esp32OutPin…) override via Part<O>
   template<typename U = unsigned char>
   struct OutPin {
     using Unit = U;
@@ -59,6 +61,7 @@ namespace onePin {
     static void act()       {}
   };
 
+  /// @brief silent IOPin terminal; bidirectional; hardware components override via Part<O>
   template<typename U = unsigned char>
   struct IOPin {
     using Unit = U;
@@ -83,6 +86,7 @@ namespace onePin {
   //   using Led = APIOf<AvrOutPin, Out, Mask<Pins<5>>, chip::PortB>;
   //   Led::begin();   // dir_out() called — no manual led.dir_out() needed
   // ============================================================
+  /// @brief direction-setter component; begin() calls dir_out() then chains; place above Mask<> in chain
   struct Out {
     template<typename O>
     struct Part : O {
@@ -91,6 +95,7 @@ namespace onePin {
     };
   };
 
+  /// @brief direction-setter component; begin() calls dir_in() then chains; place above Mask<> in chain
   struct In {
     template<typename O>
     struct Part : O {
@@ -167,6 +172,7 @@ namespace onePin {
   // ============================================================
   // PortAlloc<Port, PinChains...> — single-port collision check
   // ============================================================
+  /// @brief compile-time collision check for one port: asserts pins are in-bounds and non-overlapping
   template<typename Port, typename... PinChains>
   struct PortAlloc {
     using Unit = typename Port::Unit;
@@ -206,6 +212,7 @@ namespace onePin {
   // Future: Periph<PinChains...> will group multi-pin peripherals (SPI, I2C, UART)
   // so the block-level check applies at peripheral granularity.
   // ============================================================
+  /// @brief compile-time device-wide pin allocation check: one Mask<> per peripheral, no cross-peripheral conflicts
   template<typename... Peripherals>
   struct DeviceClass {
   private:
@@ -264,6 +271,7 @@ namespace onePin {
   // BootDef — terminal for Boot item chains (same role as InPin/OutPin for GPIO)
   // Provides begin() eraser; hardware boot components override via Part<O>.
   // ============================================================
+  /// @brief terminal for Boot item chains; provides silent begin()/onOverflow(); hardware overrides via Part<O>
   struct BootDef {
     BootDef() = delete;
     static void begin()      {}
@@ -274,6 +282,7 @@ namespace onePin {
   // Boot<Items...> — init-first section (clocks, timers, system resources)
   // Place at head of Device<> so its items run before GPIO peripherals.
   // ============================================================
+  /// @brief init-first section: place at head of Device<> so clocks/timers run before GPIO peripherals
   template<typename... Items>
   struct Boot {};
 
@@ -284,6 +293,7 @@ namespace onePin {
   //   2. GPIO peripherals initialised after
   // Only calls begin() on items that have it (has_begin_fn).
   // ============================================================
+  /// @brief top-level device aggregator: enforces pin allocation, runs Boot items then GPIO peripherals on begin()
   template<typename... All>
   struct Device;
 

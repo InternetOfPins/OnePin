@@ -278,10 +278,9 @@ namespace onePin {
     static void onOverflow() {}
   };
 
-  // ============================================================
   // Boot<Items...> — init-first section (clocks, timers, system resources)
   // Place at head of Device<> so its items run before GPIO peripherals.
-  // ============================================================
+
   /// @brief init-first section: place at head of Device<> so clocks/timers run before GPIO peripherals
   template<typename... Items>
   struct Boot {};
@@ -293,6 +292,7 @@ namespace onePin {
   //   2. GPIO peripherals initialised after
   // Only calls begin() on items that have it (has_begin_fn).
   // ============================================================
+  
   /// @brief top-level device aggregator: enforces pin allocation, runs Boot items then GPIO peripherals on begin()
   template<typename... All>
   struct Device;

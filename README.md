@@ -1,5 +1,7 @@
 # OnePin
 
+**HAPI Compatibility:** Works with new Check/Apply/ApplyPack API (2026-Q2)
+
 HAPI pin/port API terminals. Hardware implementations are in **OneChip**. Bit selection is in **OneBit**.
 
 ## Terminals

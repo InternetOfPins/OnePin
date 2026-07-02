@@ -117,21 +117,21 @@ namespace onePin {
       struct Check<T, std::void_t<decltype(T::allowedMask)>> : std::true_type {};
     };
 
-    // Map-based count: MatchToIC<P> maps each element to integral_constant<int,0|1>
-    // Chain::Build<SumIC> then folds them. Map recurses into nested chains automatically.
-    // template<typename P>
-    // struct MatchToIC {
-    //   template<typename O>
-    //   using Apply  = std::integral_constant<int, P::template Check<O>::value ? 1 : 0>;
-    //   template<typename... OO> using ApplyPack = Chain<OO...>;
-    // };
+    // Map-based count: MatchToIC<P> maps each element to integral_constant<int,0|1>;
+    // ApplyPack sums them. hapi::Eval/Traverse recurses into nested chains automatically,
+    // so ApplyPack only ever sees leaf results — no Check<> member needed here (that's
+    // only a convenience alias predicates like Any<Q>/IsInstanceOf<W> add for external
+    // callers; MatchToIC is only ever driven internally via hapi::Eval below).
+    template<typename P>
+    struct MatchToIC {
+      template<typename O>
+      using Apply = std::integral_constant<int, P::template Check<O>::value ? 1 : 0>;
+      template<typename... OO>
+      using ApplyPack = std::integral_constant<int, (OO::value + ...)>;
+    };
 
-    // Sum of integral_constants (flat result of Map over a non-nested chain)
-    // template<typename... ICs>
-    // struct SumIC { static constexpr int value = (ICs::value + ...); };
-
-    // template<typename P, typename C>
-    // static constexpr int countByMap = hapi::Map<MatchToIC<P>, C>::Expr::template Build<SumIC>::value;
+    template<typename P, typename C>
+    static constexpr int countByMap = hapi::Eval<MatchToIC<P>, C>::value;
 
     // firstInChain<P>(Chain<...>) — return first matching element instance (for decltype)
     // Sequential by nature; Map-based extraction is future work.
@@ -225,10 +225,10 @@ namespace onePin {
     static constexpr typename port_t_<PC>::Unit maskOf =
       oneBit::extractMask<typename port_t_<PC>::Unit>(typename PC::Types::Tail{});
 
-    // Count of Mask<> components in a peripheral chain — via Map<MatchToIC> + Build<SumIC>
-    // template<typename PC>
-    // static constexpr int maskCount =
-    //   detail::countByMap<hapi::IsInstanceOf<oneBit::Mask>, typename PC::Types::Tail>;
+    // Count of Mask<> components in a peripheral chain
+    template<typename PC>
+    static constexpr int maskCount =
+      detail::countByMap<hapi::IsInstanceOf<oneBit::Mask>, typename PC::Types::Tail>;
 
     // Pairwise same-port no-conflict check
     template<typename P1, typename P2>
@@ -255,7 +255,7 @@ namespace onePin {
   public:
     DeviceClass() = delete;
 
-    static_assert(((hapi::query<hapi::IsInstanceOf<oneBit::Mask>, typename Peripherals::Types> && ...) == true),
+    static_assert(((maskCount<Peripherals> == 1) && ...),
       "DeviceClass: each peripheral must have exactly one Mask<> in its chain");
 
     static_assert(((( maskOf<Peripherals> & port_t_<Peripherals>::allowedMask)

@@ -27,27 +27,28 @@
 
 namespace onePin {
 
+  // Edge mode markers (no members; just tag types) — defined first for SFINAE
+  struct OnChange {};  ///< Any edge: rising or falling
+  struct OnRise {};    ///< Rising edge only
+  struct OnFall {};    ///< Falling edge only
+
   /// SFINAE trait: does T satisfy is_change_source contract?
+  /// Checks for non-templatized begin(), read(), changed() methods
   template<typename T, typename = void>
   struct is_change_source : std::false_type {};
 
   template<typename T>
   struct is_change_source<T, std::void_t<
-    decltype(std::declval<T>().template begin<onePin::OnChange>()),
-    decltype(std::declval<T>().template read<onePin::OnChange>()),
-    decltype(std::declval<T>().template changed<onePin::OnChange>())
+    decltype(std::declval<T>().begin()),
+    decltype(std::declval<T>().read()),
+    decltype(std::declval<T>().changed())
   >> : std::true_type {};
-
-  // Edge mode markers (no members; just tag types)
-  struct OnChange {};  ///< Any edge: rising or falling
-  struct OnRise {};    ///< Rising edge only
-  struct OnFall {};    ///< Falling edge only
 
   /// Silent terminal: satisfies is_change_source, useful for testing
   struct ChangeSourceTerm {
-    template<typename EdgeMode> static void begin() {}
-    template<typename EdgeMode> static uint8_t read() { return 0; }
-    template<typename EdgeMode> static bool changed() { return false; }
+    static void begin() {}
+    static uint8_t read() { return 0; }
+    static bool changed() { return false; }
   };
 
   static_assert(is_change_source<ChangeSourceTerm>::value,
